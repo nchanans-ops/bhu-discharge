@@ -1280,11 +1280,11 @@ function togI(pid,sid,iid){
     })()};
     document.getElementById('ntfTxt').textContent=`Step ${iid}: ${i.th}`;
     // Reset checkboxes - default nurse checked
-    document.getElementById('ng1').checked=true;
+    document.getElementById('ng1').checked=false;
     document.getElementById('ng2').checked=false;
     document.getElementById('ng3').checked=false;
     document.getElementById('ng4').checked=false;
-    document.querySelectorAll('.ng-item').forEach((el,idx)=>{el.classList.toggle('checked',idx===0)});
+    document.querySelectorAll('.ng-item').forEach(el=>el.classList.remove('checked'));
     openModal('ntfM');
   }
 }
