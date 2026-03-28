@@ -1273,7 +1273,7 @@ function togI(pid,sid,iid){
   sv();render();
   // If checked (not unchecked), show notify popup
   if(i.ck){
-    pendingNtf={msg:`[Step Done] ${p.name} (HN:${p.hn})\n${iid} ${i.th}\nProgress: ${pr.pct}% (${pr.d}/${pr.t})\nWard: ${p.ward} Room: ${p.room}`};
+    pendingNtf={type:'step',name:p.name,hn:p.hn,ward:p.ward,room:p.room,doctor:p.doctor||'-',status:p.status,step:`${iid} ${i.th}`,progress:pr.pct,done:pr.d,total:pr.t};
     document.getElementById('ntfTxt').textContent=`Step ${iid}: ${i.th}`;
     // Reset checkboxes - default nurse checked
     document.getElementById('ng1').checked=true;
@@ -1288,7 +1288,7 @@ function togI(pid,sid,iid){
 function manualNtf(){
   if(!sel)return;const p=pts.find(x=>x.id===sel);if(!p)return;
   const pr=prg(p);
-  pendingNtf={msg:`[Status Update] ${p.name} (HN:${p.hn})\nWard: ${p.ward} Room: ${p.room}\nPhysician: ${p.doctor||'-'}\nProgress: ${pr.pct}% (${pr.d}/${pr.t})`};
+  pendingNtf={type:'update',name:p.name,hn:p.hn,ward:p.ward,room:p.room,doctor:p.doctor||'-',status:p.status,progress:pr.pct,done:pr.d,total:pr.t};
   document.getElementById('ntfTxt').textContent=`Status update for ${p.name}`;
   document.getElementById('ng1').checked=true;
   document.getElementById('ng2').checked=false;
@@ -1310,11 +1310,11 @@ async function doNotify(){
   closeModal('ntfM');
   for(const t of targets){
     try{
-      await fetch(cfg.wh,{method:'POST',body:JSON.stringify({group:t.group,groupName:t.name,message:pendingNtf.msg})});
+      await fetch(cfg.wh,{method:'POST',body:JSON.stringify({group:t.group,groupName:t.name,flex:pendingNtf})});
     }catch(e){console.warn('Push failed:',e)}
   }
   toast('Sent',`Notified ${targets.map(t=>t.name).join(', ')}`,'i');
-  addToLog(pendingNtf.msg, targets.map(t=>t.name).join(', '));
+  addToLog(`[${pendingNtf.type}] ${pendingNtf.name} (HN:${pendingNtf.hn}) Progress:${pendingNtf.progress}%`, targets.map(t=>t.name).join(', '));
   pendingNtf=null;
 }
 
@@ -1364,7 +1364,7 @@ function compAll(){
   p.checklist.forEach(s=>s.items.forEach(i=>{if(!i.ck){i.ck=true;i.at=new Date().toISOString()}}));
   sv();render();
   // Show notify for discharge complete
-  pendingNtf={msg:`[Discharge Complete] ${p.name} (HN:${p.hn})\nWard: ${p.ward} Room: ${p.room}\nAll steps completed. Patient discharged.`};
+  pendingNtf={type:'complete',name:p.name,hn:p.hn,ward:p.ward,room:p.room,doctor:p.doctor||'-',status:p.status,progress:100,done:pr.t,total:pr.t};
   document.getElementById('ntfTxt').textContent=`Discharge complete: ${p.name}`;
   document.getElementById('ng1').checked=true;
   document.getElementById('ng2').checked=true;
