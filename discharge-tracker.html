@@ -1387,7 +1387,13 @@ function compAll(){
   sv();render();
   // Show notify for discharge complete
   pendingNtf={msg:`🏥 Bangkok Hospital Udon\n${'─'.repeat(28)}\n🎉 Discharge เสร็จสิ้น\n\n👤 ${p.name}\n   HN: ${p.hn}\n   Ward: ${p.ward} Room: ${p.room||'-'}\n   แพทย์: ${p.doctor||'-'}\n\n✅ ครบทุก Step (${pr.t}/${pr.t})\n${'─'.repeat(28)}`};
-  sendToAllGroups();
+  document.getElementById('ntfTxt').textContent=`Discharge complete: ${p.name}`;
+  document.getElementById('ng1').checked=true;
+  document.getElementById('ng2').checked=true;
+  document.getElementById('ng3').checked=true;
+  document.getElementById('ng4').checked=true;
+  document.querySelectorAll('.ng-item').forEach(el=>el.classList.add('checked'));
+  openModal('ntfM');
 }
 
 function saveCfg(){
