@@ -1273,7 +1273,11 @@ function togI(pid,sid,iid){
   sv();render();
   // If checked (not unchecked), show notify popup
   if(i.ck){
-    pendingNtf={msg:`🏥 Bangkok Hospital Udon\n${'─'.repeat(28)}\n✅ Step เสร็จสิ้น\n\n👤 ${p.name}\n   HN: ${p.hn}\n   Ward: ${p.ward} Room: ${p.room||'-'}\n   แพทย์: ${p.doctor||'-'}\n\n📋 ${iid} ${i.th}\n\n📊 Progress: ${pr.pct}% (${pr.d}/${pr.t})\n${'─'.repeat(28)}`};
+    pendingNtf={msg:(()=>{
+      const now=new Date();
+      const dt=now.toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'numeric'})+' '+now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})+' น.';
+      return `${'═'.repeat(31)}\n  BANGKOK HOSPITAL UDON\n  ระบบ Discharge Tracking\n${'═'.repeat(31)}\nประเภท   : Step เสร็จสิ้น\nวันเวลา  : ${dt}\n${'─'.repeat(31)}\nข้อมูลผู้ป่วย\n${'─'.repeat(31)}\nชื่อ-สกุล    : ${p.name}\nHN           : ${p.hn}\nWard/ห้อง    : ${p.ward} / ${p.room||'-'}\nแพทย์ผู้ดูแล  : ${p.doctor||'-'}\n${'─'.repeat(31)}\nStep ที่ดำเนินการเสร็จสิ้น\n${'─'.repeat(31)}\n${iid} ${i.th}\n${'─'.repeat(31)}\nความคืบหน้า : ${pr.pct}% (${pr.d}/${pr.t} steps)\n${'═'.repeat(31)}`;
+    })()};
     document.getElementById('ntfTxt').textContent=`Step ${iid}: ${i.th}`;
     // Reset checkboxes - default nurse checked
     document.getElementById('ng1').checked=true;
@@ -1288,7 +1292,11 @@ function togI(pid,sid,iid){
 function manualNtf(){
   if(!sel)return;const p=pts.find(x=>x.id===sel);if(!p)return;
   const pr=prg(p);
-  pendingNtf={msg:`🏥 Bangkok Hospital Udon\n${'─'.repeat(28)}\n🔔 อัปเดตสถานะผู้ป่วย\n\n👤 ${p.name}\n   HN: ${p.hn}\n   Ward: ${p.ward} Room: ${p.room||'-'}\n   แพทย์: ${p.doctor||'-'}\n\n📊 Progress: ${pr.pct}% (${pr.d}/${pr.t})\n${'─'.repeat(28)}`};
+  pendingNtf={msg:(()=>{
+    const now=new Date();
+    const dt=now.toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'numeric'})+' '+now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})+' น.';
+    return `${'═'.repeat(31)}\n  BANGKOK HOSPITAL UDON\n  ระบบ Discharge Tracking\n${'═'.repeat(31)}\nประเภท   : อัปเดตสถานะผู้ป่วย\nวันเวลา  : ${dt}\n${'─'.repeat(31)}\nข้อมูลผู้ป่วย\n${'─'.repeat(31)}\nชื่อ-สกุล    : ${p.name}\nHN           : ${p.hn}\nWard/ห้อง    : ${p.ward} / ${p.room||'-'}\nแพทย์ผู้ดูแล  : ${p.doctor||'-'}\n${'─'.repeat(31)}\nความคืบหน้า : ${pr.pct}% (${pr.d}/${pr.t} steps)\n${'═'.repeat(31)}`;
+  })()};
   document.getElementById('ntfTxt').textContent=`Status update for ${p.name}`;
   document.getElementById('ng1').checked=true;
   document.getElementById('ng2').checked=false;
@@ -1386,7 +1394,11 @@ function compAll(){
   p.checklist.forEach(s=>s.items.forEach(i=>{if(!i.ck){i.ck=true;i.at=new Date().toISOString()}}));
   sv();render();
   // Show notify for discharge complete
-  pendingNtf={msg:`🏥 Bangkok Hospital Udon\n${'─'.repeat(28)}\n🎉 Discharge เสร็จสิ้น\n\n👤 ${p.name}\n   HN: ${p.hn}\n   Ward: ${p.ward} Room: ${p.room||'-'}\n   แพทย์: ${p.doctor||'-'}\n\n✅ ครบทุก Step (${pr.t}/${pr.t})\n${'─'.repeat(28)}`};
+  pendingNtf={msg:(()=>{
+    const now=new Date();
+    const dt=now.toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'numeric'})+' '+now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})+' น.';
+    return `${'═'.repeat(31)}\n  BANGKOK HOSPITAL UDON\n  ระบบ Discharge Tracking\n${'═'.repeat(31)}\nประเภท   : Discharge เสร็จสิ้น\nวันเวลา  : ${dt}\n${'─'.repeat(31)}\nข้อมูลผู้ป่วย\n${'─'.repeat(31)}\nชื่อ-สกุล    : ${p.name}\nHN           : ${p.hn}\nWard/ห้อง    : ${p.ward} / ${p.room||'-'}\nแพทย์ผู้ดูแล  : ${p.doctor||'-'}\n${'─'.repeat(31)}\nครบทุก Step แล้ว (${pr.t}/${pr.t} steps)\n${'═'.repeat(31)}`;
+  })()};
   document.getElementById('ntfTxt').textContent=`Discharge complete: ${p.name}`;
   document.getElementById('ng1').checked=true;
   document.getElementById('ng2').checked=true;
