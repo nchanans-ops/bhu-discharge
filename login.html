@@ -113,6 +113,12 @@ body{font-family:'TH Niramit AS',sans-serif;min-height:100vh;display:flex;overfl
   .right::before{display:none}
 }
 </style>
+  <link rel="manifest" href="/bhu-discharge/manifest.json">
+  <meta name="theme-color" content="#1B2E5C">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BHU Discharge">
+  <link rel="apple-touch-icon" href="/bhu-discharge/icon-192.png">
 </head>
 <body>
 
@@ -223,5 +229,10 @@ function doLogin(){
 }
 window.onload=()=>document.getElementById('inUser').focus();
 </script>
+  <script>
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('/bhu-discharge/sw.js');
+    }
+  </script>
 </body>
 </html>

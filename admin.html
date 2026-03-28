@@ -262,6 +262,12 @@ tbody tr:hover td{background:var(--navy-2xl)}
 
 @media(max-width:860px){.sidebar{display:none}.stat-grid{grid-template-columns:1fr 1fr}}
 </style>
+  <link rel="manifest" href="/bhu-discharge/manifest.json">
+  <meta name="theme-color" content="#1B2E5C">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BHU Discharge">
+  <link rel="apple-touch-icon" href="/bhu-discharge/icon-192.png">
 </head>
 <body>
 
@@ -1082,5 +1088,10 @@ function saveAllSettings(){
 }
 
 </script>
+  <script>
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('/bhu-discharge/sw.js');
+    }
+  </script>
 </body>
 </html>

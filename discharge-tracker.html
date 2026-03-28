@@ -228,6 +228,12 @@ body{font-family:'TH Niramit AS',sans-serif;background:#ECEEF2;color:var(--f6);f
   .cl-ck{width:20px;height:20px}
 }
 </style>
+  <link rel="manifest" href="/bhu-discharge/manifest.json">
+  <meta name="theme-color" content="#1B2E5C">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BHU Discharge">
+  <link rel="apple-touch-icon" href="/bhu-discharge/icon-192.png">
 </head>
 <body>
 
@@ -832,7 +838,12 @@ tr:nth-child(even) td{background:#FAFBFC}
   <table><thead><tr><th>ชื่อ-สกุล</th><th>HN</th><th>Ward/ห้อง</th><th>แพทย์</th><th>เวลาจำหน่าย</th><th>สถานะ</th><th>Progress</th></tr></thead>
   <tbody>${done.map(ptRow).join('')}</tbody></table>`:''}
   <div class="foot">Bangkok Hospital Udon | Discharge Tracking System | ${todayLabel}</div>
-</div></body></html>`);
+</div>  <script>
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('/bhu-discharge/sw.js');
+    }
+  </script>
+</body></html>`);
   w.document.close();
 }
 // Dashboard
