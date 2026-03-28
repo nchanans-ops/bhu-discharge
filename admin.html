@@ -1,1 +1,522 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta http-equiv="refresh" content="0;url=index.html"></head><body></body></html>
+<!DOCTYPE html>
+<html lang="th"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin Panel | BHU Discharge</title>
+<link href="https://fonts.cdnfonts.com/css/th-niramit-as" rel="stylesheet">
+<style>
+* {margin:0;padding:0;box-sizing:border-box}:root {
+  --c1:#1B2E5C;--c1l:#304D7A;--c1xl:#EBF0F7;
+  --c2:#C41E2F;
+  --ok:#1A7742;--okl:#E3F3EB;
+  --wn:#A67B0A;--wnl:#FDF5DD;
+  --f0:#FAFBFC;--f1:#F0F2F5;--f2:#D8DCE4;--f3:#AEB5C2;--f4:#7A8394;--f5:#515A6B;--f6:#343B4D;
+  --bl:#20639B;--bll:#E4F0F9;
+}body {font-family:'TH Niramit AS',sans-serif;background:var(--f0);color:var(--f6);font-size:13px;min-height:100vh}/* TOP BAR */
+.topbar {
+  background:var(--c1);color:#fff;
+  padding:0 28px;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 12px rgba(14,27,56,.2);
+}.topbar-left {display:flex;align-items:center;gap:14px}.topbar-logo {
+  width:34px;height:34px;background:var(--c2);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+}.topbar-title {font-size:15px;font-weight:800;letter-spacing:.3px}.topbar-sub {font-size:11px;opacity:.55;margin-top:1px}.topbar-right {display:flex;align-items:center;gap:12px}.admin-badge {
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);
+  padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;
+}.btn-logout {
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  color:#fff;padding:6px 14px;border-radius:7px;font-family:inherit;
+  font-size:12px;font-weight:600;cursor:pointer;transition:.15s;
+}.btn-logout:hover {background:rgba(255,255,255,.2)}/* LAYOUT */
+.layout {display:flex;min-height:calc(100vh - 56px)}/* SIDEBAR */
+.sidebar {
+  width:220px;background:#fff;border-right:1px solid var(--f2);
+  padding:20px 0;flex-shrink:0;
+  position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;
+}.sidebar-section {
+  font-size:10px;font-weight:700;color:var(--f3);
+  letter-spacing:.8px;text-transform:uppercase;
+  padding:0 20px;margin:16px 0 6px;
+}.sidebar-item {
+  display:flex;align-items:center;gap:10px;
+  padding:9px 20px;cursor:pointer;
+  font-size:13px;font-weight:600;color:var(--f4);
+  transition:.12s;border-left:3px solid transparent;
+  text-decoration:none;
+}.sidebar-item:hover {background:var(--f1);color:var(--f6)}.sidebar-item.on {background:var(--c1xl);color:var(--c1);border-left-color:var(--c1)}.sidebar-item svg {flex-shrink:0;opacity:.7}.sidebar-item.on svg {opacity:1}/* MAIN */
+.main {flex:1;padding:28px;overflow:auto}.page {display:none}.page.on {display:block}/* STAT CARDS */
+.stat-row {display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}.stat-card {
+  background:#fff;border:1px solid var(--f2);border-radius:12px;
+  padding:18px 20px;display:flex;align-items:center;gap:14px;
+}.stat-icon {
+  width:44px;height:44px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}.stat-num {font-size:26px;font-weight:800;color:var(--c1);line-height:1}.stat-lbl {font-size:11px;color:var(--f3);margin-top:3px;font-weight:600}/* SECTION HEADER */
+.sec-hdr {
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;
+}.sec-title {font-size:15px;font-weight:800;color:var(--c1)}/* TABLE */
+.tbl-wrap {background:#fff;border:1px solid var(--f2);border-radius:12px;overflow:hidden}.tbl-search {
+  padding:14px 18px;border-bottom:1px solid var(--f2);
+  display:flex;align-items:center;gap:10px;
+}.tbl-search input {
+  flex:1;padding:8px 12px;border:1.5px solid var(--f2);border-radius:7px;
+  font-family:inherit;font-size:13px;color:var(--f6);outline:0;
+  transition:.15s;
+}.tbl-search input:focus {border-color:var(--c1);box-shadow:0 0 0 3px var(--c1xl)}table {width:100%;border-collapse:collapse}th {
+  background:var(--f1);padding:10px 16px;text-align:left;
+  font-size:11px;font-weight:700;color:var(--f4);
+  letter-spacing:.4px;text-transform:uppercase;
+  border-bottom:1px solid var(--f2);
+}td {padding:12px 16px;border-bottom:1px solid var(--f1);font-size:13px;vertical-align:middle}tr:last-child td {border-bottom:0}tr:hover td {background:var(--f0)}.role-badge {
+  display:inline-block;padding:2px 10px;border-radius:10px;
+  font-size:11px;font-weight:700;
+}.status-dot {
+  width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;
+}/* BUTTONS */
+.btn {
+  padding:7px 14px;border-radius:7px;border:0;font-family:inherit;
+  font-size:12px;font-weight:700;cursor:pointer;transition:.12s;
+  display:inline-flex;align-items:center;gap:5px;
+}.btn-primary {background:var(--c1);color:#fff}.btn-primary:hover {background:var(--c1l)}.btn-danger {background:#FEF5F5;color:var(--c2);border:1px solid #FACECC}.btn-danger:hover {background:#FACECC}.btn-edit {background:var(--bll);color:var(--bl);border:1px solid #C6DDF0}.btn-edit:hover {background:#C6DDF0}.btn-sm {padding:5px 10px;font-size:11px}/* MODAL */
+.modal-bg {
+  display:none;position:fixed;inset:0;background:rgba(14,27,56,.5);
+  z-index:200;align-items:center;justify-content:center;
+  animation:fadeIn .15s ease;
+}.modal-bg.open {display:flex}@keyframes fadeIn {from{opacity:0}to{opacity:1}}.modal {
+  background:#fff;border-radius:14px;width:460px;max-width:95vw;
+  overflow:hidden;box-shadow:0 24px 60px rgba(14,27,56,.22);
+  animation:slideUp .18s ease;
+}@keyframes slideUp {from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}.modal-header {
+  padding:18px 22px 0;display:flex;align-items:center;justify-content:space-between;
+}.modal-title {font-size:15px;font-weight:800;color:var(--c1)}.modal-close {
+  width:28px;height:28px;border-radius:6px;border:1px solid var(--f2);
+  background:var(--f0);cursor:pointer;font-size:14px;color:var(--f4);
+}.modal-close:hover {background:var(--f1)}.modal-body {padding:18px 22px}.modal-foot {
+  padding:12px 22px 18px;display:flex;justify-content:flex-end;gap:8px;
+  border-top:1px solid var(--f1);
+}/* FORM */
+.fg {margin-bottom:14px}.fg label {display:block;font-size:11px;font-weight:700;color:var(--f4);margin-bottom:5px;letter-spacing:.3px;text-transform:uppercase}.fg input, .fg select {
+  width:100%;padding:10px 12px;border:1.5px solid var(--f2);border-radius:8px;
+  font-family:inherit;font-size:13px;color:var(--f6);background:#fff;outline:0;transition:.15s;
+}.fg input:focus, .fg select:focus {border-color:var(--c1);box-shadow:0 0 0 3px var(--c1xl)}.fg-row {display:grid;grid-template-columns:1fr 1fr;gap:12px}.fg-hint {font-size:11px;color:var(--f3);margin-top:4px}/* TOAST */
+.toast {
+  position:fixed;bottom:24px;right:24px;z-index:999;
+  background:var(--c1);color:#fff;padding:12px 18px;border-radius:10px;
+  font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(14,27,56,.2);
+  animation:slideUp .2s ease;display:flex;align-items:center;gap:8px;
+}.toast.ok {background:var(--ok)}.toast.err {background:var(--c2)}/* EMPTY STATE */
+.empty {text-align:center;padding:40px;color:var(--f3)}.empty svg {margin:0 auto 12px;opacity:.3;display:block}.empty p {font-size:13px;font-weight:600}/* LOG TABLE */
+.log-chip {
+  padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;
+}@media(max-width:768px) {
+  .sidebar{display:none}
+  .stat-row{grid-template-columns:1fr 1fr}
+}
+</style>
+</head><body>
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-logo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="12" y1="9" x2="12" y2="15"/></svg>
+    </div>
+    <div>
+      <div class="topbar-title">Bangkok Hospital Udon</div>
+      <div class="topbar-sub">Admin Panel — Discharge Tracking</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="btn-logout" onclick="showView('tracker')" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25)">Discharge Tracker →</button>
+    <span class="admin-badge">Administrator</span>
+    <button class="btn-logout" onclick="sessionStorage.clear();showView('login')">ออกจากระบบ</button>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">จัดการ</div>
+    <a class="sidebar-item on" onclick="showPage('users',this)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      จัดการผู้ใช้งาน
+    </a>
+    <a class="sidebar-item" onclick="showPage('log',this)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Log การเข้าสู่ระบบ
+    </a>
+    <div class="sidebar-section">ระบบ</div>
+    <a class="sidebar-item" onclick="showView('tracker')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+      Discharge Tracker
+    </a>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- PAGE: USERS -->
+    <div class="page on" id="page-users">
+      <!-- Stats -->
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#EBF0F7">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B2E5C" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <div class="stat-num" id="cntAll">0</div>
+            <div class="stat-lbl">ผู้ใช้งานทั้งหมด</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#E4F0F9">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#20639B" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div>
+            <div class="stat-num" id="cntNurse">0</div>
+            <div class="stat-lbl">พยาบาล</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#FEF5F5">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C41E2F" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <div class="stat-num" id="cntAdmin">0</div>
+            <div class="stat-lbl">Admin</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Table -->
+      <div class="sec-hdr">
+        <div class="sec-title">รายชื่อผู้ใช้งาน</div>
+        <button class="btn btn-primary" onclick="openAddModal()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          เพิ่มผู้ใช้งาน
+        </button>
+      </div>
+
+      <div class="tbl-wrap">
+        <div class="tbl-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#AEB5C2" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" placeholder="ค้นหาชื่อ, username, ward..." oninput="renderUsers()">
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>ชื่อ-สกุล</th>
+              <th>Username</th>
+              <th>Role</th>
+              <th>Ward</th>
+              <th>สถานะ</th>
+              <th>เพิ่มโดย</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="userTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PAGE: LOG -->
+    <div class="page" id="page-log">
+      <div class="sec-hdr">
+        <div class="sec-title">Log การเข้าสู่ระบบ</div>
+        <button class="btn btn-edit" onclick="clearLog()">ล้าง Log</button>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>วันที่-เวลา</th><th>Username</th><th>Role</th><th>สถานะ</th><th>IP (Demo)</th></tr>
+          </thead>
+          <tbody id="logTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ADD/EDIT USER MODAL -->
+<div class="modal-bg" id="userModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">เพิ่มผู้ใช้งานใหม่</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editId">
+      <div class="fg-row">
+        <div class="fg">
+          <label>ชื่อ</label>
+          <input type="text" id="fFirstname" placeholder="เช่น สมหญิง">
+        </div>
+        <div class="fg">
+          <label>นามสกุล</label>
+          <input type="text" id="fLastname" placeholder="เช่น ใจดี">
+        </div>
+      </div>
+      <div class="fg">
+        <label>Username</label>
+        <input type="text" id="fUsername" placeholder="เช่น nurse01">
+        <div class="fg-hint">ใช้ตัวอักษรภาษาอังกฤษ ตัวเลข หรือ _ เท่านั้น</div>
+      </div>
+      <div class="fg-row">
+        <div class="fg">
+          <label>รหัสผ่าน</label>
+          <input type="password" id="fPassword" placeholder="อย่างน้อย 6 ตัวอักษร">
+        </div>
+        <div class="fg">
+          <label>ยืนยันรหัสผ่าน</label>
+          <input type="password" id="fPassword2" placeholder="กรอกซ้ำ">
+        </div>
+      </div>
+      <div class="fg-row">
+        <div class="fg">
+          <label>Role</label>
+          <select id="fRole">
+            <option value="nurse">พยาบาล</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Ward ที่รับผิดชอบ</label>
+          <input type="text" id="fWard" placeholder="เช่น IPD-10A">
+        </div>
+      </div>
+      <div class="fg">
+        <label>สถานะ</label>
+        <select id="fStatus">
+          <option value="active">ใช้งาน</option>
+          <option value="inactive">ระงับ</option>
+        </select>
+      </div>
+      <div id="modalErr" style="display:none;background:#FEF5F5;border:1px solid #FACECC;border-radius:7px;padding:8px 12px;font-size:12px;color:#C41E2F;font-weight:600;margin-top:4px"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeModal()" style="background:var(--f1);color:var(--f5)">ยกเลิก</button>
+      <button class="btn btn-primary" onclick="saveUser()">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE MODAL -->
+<div class="modal-bg" id="delModal">
+  <div class="modal" style="width:360px">
+    <div class="modal-header">
+      <div class="modal-title" style="color:var(--c2)">ยืนยันการลบ</div>
+      <button class="modal-close" onclick="closeDelModal()">✕</button>
+    </div>
+    <div class="modal-body" style="padding-top:14px">
+      <p style="font-size:13px;color:var(--f5);line-height:1.6">คุณต้องการลบผู้ใช้งาน <strong id="delName"></strong> ออกจากระบบ?<br>การกระทำนี้ไม่สามารถย้อนกลับได้</p>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeDelModal()" style="background:var(--f1);color:var(--f5)">ยกเลิก</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">ลบผู้ใช้งาน</button>
+    </div>
+  </div>
+<script>
+
+// ── DATA ──────────────────────────────────────────────
+let users = JSON.parse(localStorage.getItem('bhu_users') || '[]');
+let loginLog = JSON.parse(localStorage.getItem('bhu_login_log') || '[]');
+let pendingDelId = null;
+
+// seed demo data if empty
+if(!users.length){
+  users = [
+    {id:'u1',firstname:'สมหญิง',lastname:'ใจดี',username:'nurse01',password:'123456',role:'nurse',ward:'IPD-10A',status:'active',createdBy:'admin',createdAt:new Date().toISOString()},
+    {id:'u2',firstname:'วิไล',lastname:'รักงาน',username:'nurse02',password:'123456',role:'nurse',ward:'IPD-7B',status:'active',createdBy:'admin',createdAt:new Date().toISOString()},
+    {id:'u3',firstname:'ผู้ดูแล',lastname:'ระบบ',username:'admin',password:'admin123',role:'admin',ward:'-',status:'active',createdBy:'system',createdAt:new Date().toISOString()},
+  ];
+  sv();
+}
+
+function sv(){ localStorage.setItem('bhu_users', JSON.stringify(users)); }
+function svLog(){ localStorage.setItem('bhu_login_log', JSON.stringify(loginLog)); }
+
+function uid(){ return 'u'+Date.now(); }
+function esc(s){ return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── PAGES ─────────────────────────────────────────────
+function showPage(name, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('on'));
+  document.getElementById('page-'+name).classList.add('on');
+  el.classList.add('on');
+  if(name==='users') renderUsers();
+  if(name==='log') renderLog();
+}
+
+// ── RENDER USERS ──────────────────────────────────────
+function renderUsers(){
+  const q = (document.getElementById('searchInput').value||'').toLowerCase();
+  const filtered = users.filter(u=>
+    (u.firstname+' '+u.lastname+u.username+(u.ward||'')).toLowerCase().includes(q)
+  );
+
+  document.getElementById('cntAll').textContent = users.length;
+  document.getElementById('cntNurse').textContent = users.filter(u=>u.role==='nurse').length;
+  document.getElementById('cntAdmin').textContent = users.filter(u=>u.role==='admin').length;
+
+  const tbody = document.getElementById('userTbody');
+  if(!filtered.length){
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><p>ไม่พบผู้ใช้งาน</p></div></td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(u=>`
+    <tr>
+      <td style="font-weight:700;color:var(--c1)">${esc(u.firstname)} ${esc(u.lastname)}</td>
+      <td style="font-family:monospace;color:var(--f5)">${esc(u.username)}</td>
+      <td><span class="role-badge" style="background:${u.role==='admin'?'#FEF5F5':'#E4F0F9'};color:${u.role==='admin'?'#C41E2F':'#20639B'}">${u.role==='admin'?'Admin':'พยาบาล'}</span></td>
+      <td style="color:var(--f4)">${esc(u.ward||'-')}</td>
+      <td>
+        <span class="status-dot" style="background:${u.status==='active'?'#1A7742':'#C41E2F'}"></span>
+        <span style="color:${u.status==='active'?'#1A7742':'#C41E2F'};font-weight:600">${u.status==='active'?'ใช้งาน':'ระงับ'}</span>
+      </td>
+      <td style="color:var(--f3);font-size:11px">${esc(u.createdBy)}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-edit btn-sm" onclick="openEditModal('${u.id}')">แก้ไข</button>
+          ${u.username!=='admin'?`<button class="btn btn-danger btn-sm" onclick="openDelModal('${u.id}')">ลบ</button>`:''}
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+// ── ADD / EDIT MODAL ──────────────────────────────────
+function openAddModal(){
+  document.getElementById('modalTitle').textContent = 'เพิ่มผู้ใช้งานใหม่';
+  document.getElementById('editId').value = '';
+  ['fFirstname','fLastname','fUsername','fPassword','fPassword2','fWard'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fRole').value = 'nurse';
+  document.getElementById('fStatus').value = 'active';
+  document.getElementById('modalErr').style.display = 'none';
+  document.getElementById('userModal').classList.add('open');
+  setTimeout(()=>document.getElementById('fFirstname').focus(), 100);
+}
+
+function openEditModal(id){
+  const u = users.find(x=>x.id===id); if(!u) return;
+  document.getElementById('modalTitle').textContent = 'แก้ไขผู้ใช้งาน';
+  document.getElementById('editId').value = id;
+  document.getElementById('fFirstname').value = u.firstname;
+  document.getElementById('fLastname').value = u.lastname;
+  document.getElementById('fUsername').value = u.username;
+  document.getElementById('fPassword').value = '';
+  document.getElementById('fPassword2').value = '';
+  document.getElementById('fRole').value = u.role;
+  document.getElementById('fWard').value = u.ward||'';
+  document.getElementById('fStatus').value = u.status;
+  document.getElementById('modalErr').style.display = 'none';
+  document.getElementById('userModal').classList.add('open');
+}
+
+function closeModal(){ document.getElementById('userModal').classList.remove('open'); }
+
+function saveUser(){
+  const id = document.getElementById('editId').value;
+  const fn = document.getElementById('fFirstname').value.trim();
+  const ln = document.getElementById('fLastname').value.trim();
+  const un = document.getElementById('fUsername').value.trim();
+  const pw = document.getElementById('fPassword').value;
+  const pw2 = document.getElementById('fPassword2').value;
+  const role = document.getElementById('fRole').value;
+  const ward = document.getElementById('fWard').value.trim();
+  const status = document.getElementById('fStatus').value;
+  const err = document.getElementById('modalErr');
+
+  const showErr = (msg)=>{ err.textContent=msg; err.style.display='block'; };
+
+  if(!fn||!ln||!un){ showErr('กรุณากรอกชื่อ นามสกุล และ Username'); return; }
+  if(!/^[a-zA-Z0-9_]+$/.test(un)){ showErr('Username ใช้ได้เฉพาะ a-z, 0-9, _'); return; }
+
+  // check duplicate username
+  const dup = users.find(u=>u.username===un && u.id!==id);
+  if(dup){ showErr('Username นี้มีในระบบแล้ว'); return; }
+
+  if(!id){
+    // new user — password required
+    if(!pw){ showErr('กรุณากรอกรหัสผ่าน'); return; }
+    if(pw.length < 6){ showErr('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'); return; }
+    if(pw !== pw2){ showErr('รหัสผ่านไม่ตรงกัน'); return; }
+    users.push({id:uid(),firstname:fn,lastname:ln,username:un,password:pw,role,ward,status,createdBy:'admin',createdAt:new Date().toISOString()});
+    toast('เพิ่มผู้ใช้งานสำเร็จ','ok');
+  } else {
+    // edit — password optional
+    if(pw && pw.length < 6){ showErr('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'); return; }
+    if(pw && pw !== pw2){ showErr('รหัสผ่านไม่ตรงกัน'); return; }
+    const u = users.find(x=>x.id===id);
+    if(!u) return;
+    u.firstname=fn; u.lastname=ln; u.username=un; u.role=role; u.ward=ward; u.status=status;
+    if(pw) u.password=pw;
+    toast('แก้ไขข้อมูลสำเร็จ','ok');
+  }
+
+  sv(); closeModal(); renderUsers();
+}
+
+// ── DELETE ────────────────────────────────────────────
+function openDelModal(id){
+  const u = users.find(x=>x.id===id); if(!u) return;
+  pendingDelId = id;
+  document.getElementById('delName').textContent = u.firstname+' '+u.lastname+' ('+u.username+')';
+  document.getElementById('delModal').classList.add('open');
+}
+function closeDelModal(){ document.getElementById('delModal').classList.remove('open'); pendingDelId=null; }
+function confirmDelete(){
+  if(!pendingDelId) return;
+  users = users.filter(u=>u.id!==pendingDelId);
+  sv(); closeDelModal(); renderUsers();
+  toast('ลบผู้ใช้งานแล้ว','err');
+}
+
+// ── LOG ───────────────────────────────────────────────
+function renderLog(){
+  const tbody = document.getElementById('logTbody');
+  if(!loginLog.length){
+    tbody.innerHTML = '<tr><td colspan="5"><div class="empty"><p>ยังไม่มี Log</p></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = [...loginLog].reverse().map(l=>`
+    <tr>
+      <td style="font-size:11px;color:var(--f4)">${new Date(l.ts).toLocaleString('th-TH')}</td>
+      <td style="font-family:monospace;font-weight:700">${esc(l.username)}</td>
+      <td><span class="role-badge" style="background:${l.role==='admin'?'#FEF5F5':'#E4F0F9'};color:${l.role==='admin'?'#C41E2F':'#20639B'}">${l.role==='admin'?'Admin':'พยาบาล'}</span></td>
+      <td><span class="log-chip" style="background:${l.ok?'#E3F3EB':'#FEF5F5'};color:${l.ok?'#1A7742':'#C41E2F'}">${l.ok?'สำเร็จ':'ล้มเหลว'}</span></td>
+      <td style="font-size:11px;color:var(--f3)">${l.ip||'192.168.1.x'}</td>
+    </tr>`).join('');
+}
+
+function clearLog(){
+  loginLog=[];svLog();renderLog();toast('ล้าง Log แล้ว');
+}
+
+// ── TOAST ─────────────────────────────────────────────
+function toast(msg, type=''){
+  const t=document.createElement('div');
+  t.className='toast'+(type?' '+type:'');
+  t.innerHTML=(type==='ok'?'✓ ':type==='err'?'✕ ':'')+msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300)},2500);
+}
+
+// ── INIT ──────────────────────────────────────────────
+renderUsers();
+
+// Add demo log entries
+if(!loginLog.length){
+  const demoLogs=[
+    {ts:new Date(Date.now()-60000).toISOString(),username:'nurse01',role:'nurse',ok:true,ip:'192.168.1.10'},
+    {ts:new Date(Date.now()-120000).toISOString(),username:'nurse02',role:'nurse',ok:true,ip:'192.168.1.11'},
+    {ts:new Date(Date.now()-300000).toISOString(),username:'baduser',role:'nurse',ok:false,ip:'192.168.1.15'},
+    {ts:new Date(Date.now()-600000).toISOString(),username:'admin',role:'admin',ok:true,ip:'192.168.1.1'},
+  ];
+  loginLog=demoLogs; svLog();
+}
+
+window.onload=()=>renderUsers();
+</script></body></html>
