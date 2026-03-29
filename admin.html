@@ -378,7 +378,7 @@ tbody tr:hover td{background:var(--navy-2xl)}
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sb-section">จัดการ</div>
-    <a class="sb-item on" onclick="showPage('users',this)">
+    <a class="sb-item" onclick="showPage('users',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       <span style="flex:1">ผู้ใช้งาน</span>
       <span class="sb-count" id="sbCount">0</span>
@@ -415,7 +415,7 @@ tbody tr:hover td{background:var(--navy-2xl)}
   <main class="main">
 
     <!-- PAGE: USERS -->
-    <div class="page on" id="page-users">
+    <div class="page" id="page-users">
       <div class="pg-hdr">
         <div class="pg-hdr-row">
           <div>
@@ -501,7 +501,7 @@ tbody tr:hover td{background:var(--navy-2xl)}
 
 
     <!-- PAGE: STATS -->
-    <div class="page" id="page-stats">
+    <div class="page on" id="page-stats">
       <div class="pg-hdr">
         <div class="pg-hdr-row">
           <div>
@@ -976,14 +976,20 @@ function toast(msg,type=''){
 
 document.addEventListener("DOMContentLoaded",function(){
   setTimeout(()=>{
-    renderUsers();
-    renderWards();
-    // บน mobile: แสดง stats (Dashboard) เป็นหน้าแรก
-    if(window.innerWidth < 768){
+    // Desktop: แสดง users เป็นหน้าแรก + activate sidebar
+    if(window.innerWidth >= 860){
       document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-      const dash = document.getElementById('page-stats');
-      if(dash) dash.classList.add('on');
+      const pg = document.getElementById('page-users');
+      if(pg) pg.classList.add('on');
+      const sb = document.querySelector('.sb-item');
+      if(sb) sb.classList.add('on');
+      renderUsers();
+      renderWards();
+    } else {
+      // Mobile: แสดง stats (Dashboard) เป็นหน้าแรก
       renderStats();
+      renderUsers();
+      renderWards();
     }
   },50);
 });
