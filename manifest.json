@@ -2,8 +2,14 @@
   "name": "BHU Discharge Tracking",
   "short_name": "BHU Discharge",
   "description": "Bangkok Hospital Udon - Discharge Tracking System",
-  "start_url": "/bhu-discharge/login.html",
-  "display": "standalone",
+  "start_url": "/bhu-discharge/login.html?pwa=1",
+  "scope": "/bhu-discharge/",
+  "display": "fullscreen",
+  "display_override": [
+    "fullscreen",
+    "standalone",
+    "minimal-ui"
+  ],
   "background_color": "#1B2E5C",
   "theme_color": "#1B2E5C",
   "orientation": "portrait-primary",
@@ -11,12 +17,14 @@
     {
       "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
