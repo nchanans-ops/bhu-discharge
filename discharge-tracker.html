@@ -1185,7 +1185,7 @@ function rDet(){
       </div>`).join('');
     return`<div class="cl-s" id="s-${s.id}"><div class="cl-sh" onclick="togS(this)"><div class="cl-sl"><div class="cl-n ${nc}">${s.id}</div><div><div class="cl-st">${esc(s.th)}</div><div class="cl-se">${esc(s.t)}</div></div></div><div class="cl-sr"><span class="cl-sc ${cc}">${s2.d}/${s2.t}</span><svg class="cl-ar" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div></div><div class="cl-bd">${items}</div></div>`
   }).join('');
-  mp.innerHTML=`<div class="dh"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div class="dh-nm">${esc(p.name)}</div><button class="b b-o b-s" onclick="openModal('expM')">Export</button></div><div class="dh-grid"><div class="dh-it"><div class="dh-lb">HN</div><div class="dh-vl">${esc(p.hn)}</div></div><div class="dh-it"><div class="dh-lb">Ward/Room</div><div class="dh-vl">${esc(p.ward)} ${esc(p.room)}</div></div><div class="dh-it"><div class="dh-lb">Physician</div><div class="dh-vl">${esc(p.doctor||'-')}</div></div><div class="dh-it"><div class="dh-lb">Discharge</div><div class="dh-vl">${fd(p.dischargeDate)}</div></div><div class="dh-it"><div class="dh-lb">Status</div><div class="dh-vl"><span class="pc-st st-${p.status[0]}">${sl(p.status)}</span></div></div></div></div><div class="pstrip"><div class="ps-bar">${segs}</div><div class="ps-info"><span>Step 1</span><span>${pr.d}/${pr.t} (${pr.pct}%)</span><span>Step 10</span></div></div><div class="cl-scroll">${secs}</div><div class="bbar"><div class="bbar-l"><div class="btn-grp"><button class="b b-o b-s" onclick="manualNtf()">Send Update</button><button class="b b-o b-s" onclick="printSummary('${p.id}')">Print</button></div></div><div class="bbar-r"><button class="b b-1 b-s" onclick="openEditModal('${p.id}')">Edit</button><button class="b b-2 b-s" onclick="cfmDel()">Delete</button><button class="b b-g b-s" onclick="compAll()">Complete Discharge</button></div></div>`;
+  mp.innerHTML=`<div class="dh"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div class="dh-nm">${esc(p.name)}</div><button class="b b-o b-s" onclick="openModal('expM')">Export</button></div><div class="dh-grid"><div class="dh-it"><div class="dh-lb">HN</div><div class="dh-vl">${esc(p.hn)}</div></div><div class="dh-it"><div class="dh-lb">Ward/Room</div><div class="dh-vl">${esc(p.ward)} ${esc(p.room)}</div></div><div class="dh-it"><div class="dh-lb">Physician</div><div class="dh-vl">${esc(p.doctor||'-')}</div></div><div class="dh-it"><div class="dh-lb">Discharge</div><div class="dh-vl">${fd(p.dischargeDate)}</div></div><div class="dh-it"><div class="dh-lb">Status</div><div class="dh-vl"><span class="pc-st st-${p.status[0]}">${sl(p.status)}</span></div></div></div></div><div class="pstrip"><div class="ps-bar">${segs}</div><div class="ps-info"><span>Step 1</span><span>${pr.d}/${pr.t} (${pr.pct}%)</span><span>Step 10</span></div></div><div class="cl-scroll">${secs}</div><div class="bbar"><div class="bbar-l"><div class="btn-grp"><button class="b b-o b-s" onclick="manualNtf()">📋 แจ้งภาพรวมผู้ป่วย</button><button class="b b-o b-s" onclick="printSummary('${p.id}')">Print</button></div></div><div class="bbar-r"><button class="b b-1 b-s" onclick="openEditModal('${p.id}')">Edit</button><button class="b b-2 b-s" onclick="cfmDel()">Delete</button><button class="b b-g b-s" onclick="compAll()">Complete Discharge</button></div></div>`;
 }
 
 function buildAsgnPanel(pid,sid,iid,cur){
@@ -1303,12 +1303,12 @@ function manualNtf(){
     const dt=now.toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'numeric'})+' '+now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})+' น.';
     return `BANGKOK HOSPITAL UDON\nระบบ Discharge Tracking\n${'─'.repeat(9)}\nประเภท   : อัปเดตสถานะผู้ป่วย\nวันเวลา  : ${dt}\n${'─'.repeat(9)}\nชื่อ-สกุล    : ${p.name}\nHN           : ${p.hn}\nWard/ห้อง    : ${p.ward} / ${p.room||'-'}\nแพทย์ผู้ดูแล  : ${p.doctor||'-'}\n${'─'.repeat(9)}\nความคืบหน้า : ${pr.pct}% (${pr.d}/${pr.t})\n${'─'.repeat(9)}`;
   })()};
-  document.getElementById('ntfTxt').textContent=`Status update for ${p.name}`;
-  document.getElementById('ng1').checked=true;
+  document.getElementById('ntfTxt').textContent=`แจ้งภาพรวมผู้ป่วย: ${p.name}`;
+  document.getElementById('ng1').checked=false;
   document.getElementById('ng2').checked=false;
   document.getElementById('ng3').checked=false;
   document.getElementById('ng4').checked=false;
-  document.querySelectorAll('.ng-item').forEach((el,idx)=>{el.classList.toggle('checked',idx===0)});
+  document.querySelectorAll('.ng-item').forEach(el=>el.classList.remove('checked'));
   openModal('ntfM');
 }
 
