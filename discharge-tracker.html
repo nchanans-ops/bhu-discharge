@@ -1161,7 +1161,34 @@ function openSettings(){
     toast('ไม่มีสิทธิ์','เฉพาะ Admin เท่านั้นที่สามารถแก้ไข Settings ได้','e');
     return;
   }
-  openModal('cfgM');
+  // โหลดค่าจาก Firebase ก่อนเปิด modal
+  if(window._fb){
+    const {db,ref,get}=window._fb;
+    get(ref(db,'bhu/config')).then(snap=>{
+      const data=snap.val();
+      if(data){cfg={...cfg,...data};localStorage.setItem('d4_c',JSON.stringify(cfg));}
+      document.getElementById('cfgWh').value=cfg.wh||'';
+      document.getElementById('cfgG1').value=cfg.g1||'';
+      document.getElementById('cfgG2').value=cfg.g2||'';
+      document.getElementById('cfgG3').value=cfg.g3||'';
+      document.getElementById('cfgG4').value=cfg.g4||'';
+      openModal('cfgM');
+    }).catch(()=>{
+      document.getElementById('cfgWh').value=cfg.wh||'';
+      document.getElementById('cfgG1').value=cfg.g1||'';
+      document.getElementById('cfgG2').value=cfg.g2||'';
+      document.getElementById('cfgG3').value=cfg.g3||'';
+      document.getElementById('cfgG4').value=cfg.g4||'';
+      openModal('cfgM');
+    });
+  } else {
+    document.getElementById('cfgWh').value=cfg.wh||'';
+    document.getElementById('cfgG1').value=cfg.g1||'';
+    document.getElementById('cfgG2').value=cfg.g2||'';
+    document.getElementById('cfgG3').value=cfg.g3||'';
+    document.getElementById('cfgG4').value=cfg.g4||'';
+    openModal('cfgM');
+  }
 }
 
 function doLogout(){
@@ -1572,7 +1599,13 @@ function saveCfg(){
   cfg.g2=document.getElementById('cfgG2').value.trim();
   cfg.g3=document.getElementById('cfgG3').value.trim();
   cfg.g4=document.getElementById('cfgG4').value.trim();
-  sv();closeModal('cfgM');toast('Saved','LINE OA settings saved');
+  localStorage.setItem('d4_c',JSON.stringify(cfg));
+  // sync ขึ้น Firebase ทันที
+  if(window._fb){
+    const {db,ref,set}=window._fb;
+    set(ref(db,'bhu/config'),cfg).catch(e=>console.warn('saveCfg FB',e));
+  }
+  closeModal('cfgM');toast('Saved','LINE OA settings saved — ทุกเครื่องจะได้รับการอัปเดต');
 }
 
 function renderStaffList(){
