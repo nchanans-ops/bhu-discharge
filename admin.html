@@ -291,6 +291,18 @@ tbody tr:hover td{background:var(--navy-2xl)}
 /* ── MOBILE NAV ── */
 .mob-nav{display:none}
 @media(max-width:860px){
+  /* ซ่อน sidebar desktop, แสดง mob-nav แทน */
+  .sidebar{display:none}
+  .wrap{flex-direction:column}
+  .main{flex:1;overflow-y:auto;width:100%}
+
+  /* Pages: ให้แสดงเต็มจอ */
+  .page.on{display:flex;flex-direction:column;width:100%}
+  .pg-hdr{padding:14px 16px 10px}
+  .pg-title{font-size:16px}
+  .pg-subtitle{font-size:12px}
+
+  /* Bottom nav */
   .mob-nav{
     display:flex;position:fixed;bottom:0;left:0;right:0;
     background:var(--white);border-top:1px solid var(--f2);
@@ -304,7 +316,22 @@ tbody tr:hover td{background:var(--navy-2xl)}
   }
   .mob-nav-item.on{color:var(--navy)}
   .mob-nav-item svg{width:20px;height:20px}
-  body{padding-bottom:56px}
+  body{padding-bottom:62px}
+
+  /* Topbar mobile */
+  .topbar{padding:0 16px;height:54px}
+  .topbar .tb-section{display:none}
+  .tb-brand-text .h{font-size:12px}
+
+  /* Table scrollable on mobile */
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{min-width:500px}
+
+  /* Stats grid 2 col on mobile */
+  .stat-grid{grid-template-columns:repeat(2,1fr)!important}
+
+  /* Ward grid 1 col */
+  .ward-grid,.grid-2{grid-template-columns:1fr!important}
 }
 </style>
   <link rel="manifest" href="/bhu-discharge/manifest.json">
@@ -948,7 +975,17 @@ function toast(msg,type=''){
 }
 
 document.addEventListener("DOMContentLoaded",function(){
-  setTimeout(()=>{renderUsers();renderWards();},50);
+  setTimeout(()=>{
+    renderUsers();
+    renderWards();
+    // บน mobile: แสดง stats (Dashboard) เป็นหน้าแรก
+    if(window.innerWidth < 768){
+      document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+      const dash = document.getElementById('page-stats');
+      if(dash) dash.classList.add('on');
+      renderStats();
+    }
+  },50);
 });
 
 if(!loginLog.length){
@@ -1163,11 +1200,22 @@ function saveAllSettings(){
 </nav>
 <script>
 function mobGo(pageId, btn){
+  // map mobile nav IDs → actual page IDs + render functions
+  const map = {
+    pgDash:  { id: 'page-stats',    fn: renderStats },
+    pgUsers: { id: 'page-users',    fn: renderUsers },
+    pgWards: { id: 'page-wards',    fn: renderWards },
+    pgNtf:   { id: 'page-log',      fn: renderLog   },
+    pgCfg:   { id: 'page-settings', fn: loadSettings },
+  };
   document.querySelectorAll('.mob-nav-item').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  const pg = document.getElementById(pageId);
-  if(pg) pg.classList.add('on');
+  const target = map[pageId];
+  if(target){
+    const pg = document.getElementById(target.id);
+    if(pg){ pg.classList.add('on'); setTimeout(target.fn, 0); }
+  }
 }
 </script>
 
