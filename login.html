@@ -13,7 +13,7 @@
   --f1:#F0F2F5;--f2:#D8DCE4;--f3:#AEB5C2;--f4:#7A8394;--f5:#515A6B;--f6:#343B4D;
   --bl:#20639B;
 }
-body{font-family:'TH Niramit AS',sans-serif;min-height:100vh;display:flex;overflow:hidden}
+body{font-family:'TH Niramit AS',sans-serif;min-height:100vh;display:flex;overflow:hidden;padding-top:env(safe-area-inset-top)}
 
 /* LEFT */
 .left{
@@ -219,17 +219,46 @@ function doLogin(){
   btn.classList.add('loading');
   document.getElementById('btnTxt').textContent='กำลังเข้าสู่ระบบ...';
   document.getElementById('btnArr').style.display='none';
+
   setTimeout(()=>{
-    // บันทึก role ลง sessionStorage
-    sessionStorage.setItem('bhu_role', currentRole);
-    sessionStorage.setItem('bhu_user', document.getElementById('inUser').value.trim());
-    // แสดง success overlay
-    showLoginSuccess(currentRole);
+    // โหลด users จาก localStorage (สร้าง default ถ้ายังไม่มี)
+    let users = JSON.parse(localStorage.getItem('bhu_users')||'[]');
+    if(!users.length){
+      users=[
+        {id:'u1',firstname:'สมหญิง',lastname:'ใจดี',username:'nurse01',password:'123456',role:'nurse',ward:'IPD-10A',status:'active'},
+        {id:'u2',firstname:'วิไล',lastname:'รักงาน',username:'nurse02',password:'123456',role:'nurse',ward:'IPD-7B',status:'active'},
+        {id:'u3',firstname:'ผู้ดูแล',lastname:'ระบบ',username:'admin',password:'admin123',role:'admin',ward:'-',status:'active'},
+      ];
+      localStorage.setItem('bhu_users', JSON.stringify(users));
+    }
+
+    // ตรวจสอบ username + password
+    const found = users.find(x => x.username===u && x.password===p && x.status==='active');
+    if(!found){
+      btn.classList.remove('loading');
+      document.getElementById('btnTxt').textContent='เข้าสู่ระบบ';
+      document.getElementById('btnArr').style.display='';
+      err.classList.add('show');
+      err.textContent='ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
+      return;
+    }
+
+    // บันทึก session
+    sessionStorage.setItem('bhu_role', found.role);
+    sessionStorage.setItem('bhu_user', found.firstname+' '+found.lastname);
+    sessionStorage.setItem('bhu_uid', found.id);
+
+    // บันทึก login log
+    const log = JSON.parse(localStorage.getItem('bhu_log')||'[]');
+    log.unshift({uid:found.id,user:found.username,name:found.firstname+' '+found.lastname,role:found.role,at:new Date().toISOString(),action:'login'});
+    localStorage.setItem('bhu_log', JSON.stringify(log.slice(0,200)));
+
+    showLoginSuccess(found.role, found.firstname+' '+found.lastname);
   },1200);
 }
 
-function showLoginSuccess(role){
-  const user = document.getElementById('inUser').value.trim();
+function showLoginSuccess(role, displayName){
+  const user = displayName || document.getElementById('inUser').value.trim();
   document.getElementById('ovName').textContent = user;
   const overlay = document.getElementById('loginOverlay');
   overlay.style.display = 'flex';
