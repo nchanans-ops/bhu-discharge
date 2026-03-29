@@ -244,9 +244,10 @@ body{font-family:'TH Niramit AS',sans-serif;background:#ECEEF2;color:var(--f6);f
   <meta name="apple-mobile-web-app-title" content="BHU Discharge">
   <link rel="apple-touch-icon" href="/bhu-discharge/icon-192.png">
   <script>
+    // SW disabled temporarily
     if('serviceWorker' in navigator){
-      window.addEventListener('load', function(){
-        navigator.serviceWorker.register('/bhu-discharge/sw.js');
+      navigator.serviceWorker.getRegistrations().then(regs=>{
+        regs.forEach(r=>r.unregister());
       });
     }
   </script>
