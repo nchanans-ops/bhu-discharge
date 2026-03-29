@@ -1466,7 +1466,26 @@ function togI(pid,sid,iid){
   p.updatedAt=new Date().toISOString();
   const pr=prg(p);
   p.status=pr.d===0?'pending':pr.d===pr.t?'completed':'active';
-  sv();render();
+  sv();
+  // update DOM เฉพาะจุดที่เปลี่ยน ไม่ render() ทั้งหมด (ป้องกัน scroll reset)
+  const ck=document.querySelector(`.cl-ck[onclick*="'${pid}',${sid},'${iid}'"]`);
+  const tx=document.querySelector(`.cl-tx[onclick*="'${pid}',${sid},'${iid}'"]`);
+  if(ck){ck.classList.toggle('on',i.ck);}
+  if(tx){tx.classList.toggle('on',i.ck);}
+  // update section count badge
+  const sec2=sp(s);
+  const secEl=document.getElementById('s-'+sid);
+  if(secEl){
+    const badge=secEl.querySelector('.cl-sc');
+    if(badge)badge.textContent=sec2.d+'/'+sec2.t;
+    const nc=sec2.dn?'dn':sec2.d>0?'pt':'';
+    const num=secEl.querySelector('.cl-n');
+    if(num){num.className='cl-n '+(nc||'');}
+    if(sec2.dn){secEl.querySelector('.cl-sh').querySelector('.cl-sc')&&secEl.querySelector('.cl-sh').querySelector('.cl-sc').classList.add('ad');}
+    else{const sc=secEl.querySelector('.cl-sc');if(sc)sc.classList.remove('ad');}
+  }
+  // update progress bar
+  rList();rCnt();checkOverdue();
   // ส่ง LINE เฉพาะเมื่อ section นี้ครบทุก item (ไม่ใช่ uncheck)
   const sec=sp(s);
   if(i.ck && sec.dn){
