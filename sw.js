@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bhu-discharge-v8';
+const CACHE_NAME = 'bhu-discharge-v9';
 const URLS = [
   '/bhu-discharge/login.html',
   '/bhu-discharge/discharge-tracker.html',

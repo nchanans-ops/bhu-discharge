@@ -1181,50 +1181,38 @@ function ld(){
     {
     // patients realtime
     onValue(ref(db,'bhu/patients'), snap=>{
-      if(snap.exists()){
-        const data=snap.val();
-        pts=Object.values(data);
-        localStorage.setItem('d4_p2',JSON.stringify(pts));
-        render();
-      } else {
-        // Firebase ว่าง - โหลด demo data แล้ว seed ขึ้น Firebase
-        demo();
-        if(pts.length){
-          const {set}=window._fb;
-          set(ref(db,'bhu/patients'), pts.reduce((acc,p)=>{acc[p.id]=p;return acc},{}))
-            .catch(e=>console.warn('seed',e));
+      try{
+        const data = snap.val();
+        if(data && typeof data === 'object'){
+          pts=Object.values(data);
+          localStorage.setItem('d4_p2',JSON.stringify(pts));
+          render();
+        } else {
+          // Firebase ว่าง - โหลด demo data แล้ว seed ขึ้น Firebase
+          demo();
+          if(pts.length){
+            const {set}=window._fb;
+            set(ref(db,'bhu/patients'), pts.reduce((acc,p)=>{acc[p.id]=p;return acc},{}))
+              .catch(e=>console.warn('seed',e));
+          }
         }
-      }
+      }catch(e){console.warn('patients listener',e);}
     });
     // config realtime
     onValue(ref(db,'bhu/config'), snap=>{
-      const data=snap.val();
-      if(data){cfg={...cfg,...data};localStorage.setItem('d4_c',JSON.stringify(cfg));}
+      try{const data=snap.val();if(data){cfg={...cfg,...data};localStorage.setItem('d4_c',JSON.stringify(cfg));}}catch(e){console.warn('config listener',e);}
     });
     // wards realtime
     onValue(ref(db,'bhu/wards'), snap=>{
-      const data=snap.val();
-      if(data){
-        wards=Array.isArray(data)?data:Object.values(data);
-        localStorage.setItem('bhu_wards',JSON.stringify(wards));
-        renderWardSelect();
-      }
+      try{const data=snap.val();if(data){wards=Array.isArray(data)?data:Object.values(data);localStorage.setItem('bhu_wards',JSON.stringify(wards));renderWardSelect();}}catch(e){console.warn('wards listener',e);}
     });
     // staff realtime
     onValue(ref(db,'bhu/staff'), snap=>{
-      const data=snap.val();
-      if(data){
-        staffList=Array.isArray(data)?data:Object.values(data);
-        localStorage.setItem('bhu_staff',JSON.stringify(staffList));
-      }
+      try{const data=snap.val();if(data){staffList=Array.isArray(data)?data:Object.values(data);localStorage.setItem('bhu_staff',JSON.stringify(staffList));}}catch(e){console.warn('staff listener',e);}
     });
     // log realtime (read-only here)
     onValue(ref(db,'bhu/log'), snap=>{
-      const data=snap.val();
-      if(data){
-        ntfLog=Array.isArray(data)?data:Object.values(data);
-        localStorage.setItem('bhu_log',JSON.stringify(ntfLog));
-      }
+      try{const data=snap.val();if(data){ntfLog=Array.isArray(data)?data:Object.values(data);localStorage.setItem('bhu_log',JSON.stringify(ntfLog));}}catch(e){console.warn('log listener',e);}
     });
     // connection state dot
     onValue(ref(db,'.info/connected'), snap=>{
