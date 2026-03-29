@@ -340,6 +340,25 @@ tbody tr:hover td{background:var(--navy-2xl)}
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="BHU Discharge">
   <link rel="apple-touch-icon" href="/bhu-discharge/icon-192.png">
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, set, get, onValue, push, update, remove }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    const FB = {
+      apiKey: "AIzaSyC9u_fvXwXAAFs5OANu9AFIb0v3IA9wOvk",
+      authDomain: "bdms-14b17.firebaseapp.com",
+      databaseURL: "https://bdms-14b17-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "bdms-14b17",
+      storageBucket: "bdms-14b17.firebasestorage.app",
+      messagingSenderId: "384494146608",
+      appId: "1:384494146608:web:45e9ba808860383bc1c9f5"
+    };
+    const app = initializeApp(FB);
+    const db  = getDatabase(app);
+    window._fb = { db, ref, set, get, onValue, push, update, remove };
+    window.dispatchEvent(new Event('fb-ready'));
+  </script>
 </head>
 <body>
 
@@ -835,8 +854,20 @@ if(!users.length){
     {id:'u3',firstname:'ผู้ดูแล',lastname:'ระบบ',username:'admin',password:'admin123',role:'admin',ward:'-',status:'active',createdBy:'system',createdAt:new Date().toISOString()},
   ];sv();
 }
-function sv(){localStorage.setItem('bhu_users',JSON.stringify(users));}
-function svLog(){localStorage.setItem('bhu_log',JSON.stringify(loginLog));}
+function sv(){
+  localStorage.setItem('bhu_users',JSON.stringify(users));
+  if(window._fb){
+    const {db,ref,set}=window._fb;
+    set(ref(db,'bhu/users'),users).catch(e=>console.warn('FB write users',e));
+  }
+}
+function svLog(){
+  localStorage.setItem('bhu_log',JSON.stringify(loginLog));
+  if(window._fb){
+    const {db,ref,set}=window._fb;
+    set(ref(db,'bhu/log'),loginLog.slice(0,200)).catch(e=>console.warn('FB write log',e));
+  }
+}
 function uid(){return 'u'+Date.now();}
 function esc(s){return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
@@ -975,8 +1006,40 @@ function toast(msg,type=''){
 }
 
 document.addEventListener("DOMContentLoaded",function(){
+  // Setup Firebase realtime listeners
+  window.addEventListener('fb-ready',()=>{
+    const {db,ref,onValue}=window._fb;
+    // users realtime
+    onValue(ref(db,'bhu/users'), snap=>{
+      if(snap.exists()){
+        const data=snap.val();
+        users=Array.isArray(data)?data:Object.values(data);
+        localStorage.setItem('bhu_users',JSON.stringify(users));
+        renderUsers();
+        renderStats();
+      }
+    });
+    // wards realtime
+    onValue(ref(db,'bhu/wards'), snap=>{
+      if(snap.exists()){
+        const data=snap.val();
+        wards=Array.isArray(data)?data:Object.values(data);
+        localStorage.setItem('bhu_wards',JSON.stringify(wards));
+        renderWards();
+      }
+    });
+    // log realtime
+    onValue(ref(db,'bhu/log'), snap=>{
+      if(snap.exists()){
+        const data=snap.val();
+        loginLog=Array.isArray(data)?data:Object.values(data);
+        loginLog.sort((a,b)=>new Date(b.at||b.ts)-new Date(a.at||a.ts));
+        localStorage.setItem('bhu_log',JSON.stringify(loginLog));
+      }
+    });
+  },{once:true});
+
   setTimeout(()=>{
-    // Desktop: แสดง users เป็นหน้าแรก + activate sidebar
     if(window.innerWidth >= 860){
       document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
       const pg = document.getElementById('page-users');
@@ -986,7 +1049,6 @@ document.addEventListener("DOMContentLoaded",function(){
       renderUsers();
       renderWards();
     } else {
-      // Mobile: แสดง stats (Dashboard) เป็นหน้าแรก
       renderStats();
       renderUsers();
       renderWards();
@@ -1032,7 +1094,13 @@ if(!wards.length){
     {id:'w4',name:'IPD-12A',desc:'หอผู้ป่วยสูติกรรม ชั้น 12'},
   ];svWard();
 }
-function svWard(){localStorage.setItem('bhu_wards',JSON.stringify(wards));}
+function svWard(){
+  localStorage.setItem('bhu_wards',JSON.stringify(wards));
+  if(window._fb){
+    const {db,ref,set}=window._fb;
+    set(ref(db,'bhu/wards'),wards).catch(e=>console.warn('FB write wards',e));
+  }
+}
 function wuid(){return 'w'+Date.now();}
 
 function renderWards(){

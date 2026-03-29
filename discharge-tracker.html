@@ -250,6 +250,28 @@ body{font-family:'TH Niramit AS',sans-serif;background:#ECEEF2;color:var(--f6);f
       });
     }
   </script>
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, set, get, onValue, push, update, remove, off }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const FB = {
+      apiKey: "AIzaSyC9u_fvXwXAAFs5OANu9AFIb0v3IA9wOvk",
+      authDomain: "bdms-14b17.firebaseapp.com",
+      databaseURL: "https://bdms-14b17-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "bdms-14b17",
+      storageBucket: "bdms-14b17.firebasestorage.app",
+      messagingSenderId: "384494146608",
+      appId: "1:384494146608:web:45e9ba808860383bc1c9f5"
+    };
+    const app = initializeApp(FB);
+    const db  = getDatabase(app);
+
+    // expose to global scope for non-module scripts
+    window._fb = { db, ref, set, get, onValue, push, update, remove, off };
+    window.dispatchEvent(new Event('fb-ready'));
+  </script>
 </head>
 <body>
 
@@ -259,6 +281,7 @@ body{font-family:'TH Niramit AS',sans-serif;background:#ECEEF2;color:var(--f6);f
   <span class="top-t">Discharge Tracking<span class="top-sub">Patient Discharge Management</span></span>
   <div class="top-r">
     <span class="clk" id="clk"></span>
+    <span id="fbDot" title="Realtime sync" style="width:8px;height:8px;border-radius:50%;background:#ccc;display:inline-block;margin-left:4px;transition:.3s" title="กำลังเชื่อมต่อ..."></span>
     <button class="tb tb-dash" onclick="openModal('dashM')" title="Dashboard">
       <svg class="dash-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       <span class="dash-label">Dashboard</span>
@@ -615,12 +638,39 @@ let wards=['IPD-10A','IPD-10B','IPD-12A','ICU-3','Ward-5'];
 let ntfLog=[];
 let staffList=['พยาบาล ก','พยาบาล ข','พยาบาล ค'];
 
-function svWards(){localStorage.setItem('bhu_wards',JSON.stringify(wards))}
-function ldWards(){const w=localStorage.getItem('bhu_wards');if(w)wards=JSON.parse(w)}
-function svLog(){localStorage.setItem('bhu_log',JSON.stringify(ntfLog))}
-function ldLog(){try{ntfLog=JSON.parse(localStorage.getItem('bhu_log')||'[]')}catch(e){ntfLog=[]}}
-function svStaff(){localStorage.setItem('bhu_staff',JSON.stringify(staffList))}
-function ldStaff(){const s=localStorage.getItem('bhu_staff');if(s)staffList=JSON.parse(s)}
+function svWards(){
+  localStorage.setItem('bhu_wards',JSON.stringify(wards));
+  if(window._fb){
+    const {db,ref,set}=window._fb;
+    set(ref(db,'bhu/wards'), wards).catch(e=>console.warn('FB write wards',e));
+  }
+}
+function ldWards(){
+  const w=localStorage.getItem('bhu_wards');
+  if(w)try{wards=JSON.parse(w)}catch(e){}
+  // Firebase listener setup in ld()
+}
+function svLog(){
+  localStorage.setItem('bhu_log',JSON.stringify(ntfLog));
+  if(window._fb){
+    const {db,ref,set}=window._fb;
+    set(ref(db,'bhu/log'), ntfLog.slice(0,200)).catch(e=>console.warn('FB write log',e));
+  }
+}
+function ldLog(){
+  try{ntfLog=JSON.parse(localStorage.getItem('bhu_log')||'[]')}catch(e){}
+}}
+function svStaff(){
+  localStorage.setItem('bhu_staff',JSON.stringify(staffList));
+  if(window._fb){
+    const {db,ref,set}=window._fb;
+    set(ref(db,'bhu/staff'), staffList).catch(e=>console.warn('FB write staff',e));
+  }
+}
+function ldStaff(){
+  const s=localStorage.getItem('bhu_staff');
+  if(s)try{staffList=JSON.parse(s)}catch(e){}
+}
 
 function renderWardSelect(){
   const sel=document.getElementById('fW');
@@ -1112,8 +1162,77 @@ function doLogout(){
   sessionStorage.clear();
   window.location.href='login.html';
 }
-function ld(){try{pts=JSON.parse(localStorage.getItem('d4_p2')||'[]')}catch(e){}try{cfg=JSON.parse(localStorage.getItem('d4_c')||JSON.stringify(cfg))}catch(e){}}
-function sv(){localStorage.setItem('d4_p2',JSON.stringify(pts));localStorage.setItem('d4_c',JSON.stringify(cfg))}
+function ld(){
+  // load from localStorage first (instant)
+  try{pts=JSON.parse(localStorage.getItem('d4_p2')||'[]')}catch(e){}
+  try{cfg=JSON.parse(localStorage.getItem('d4_c')||JSON.stringify(cfg))}catch(e){}
+  // then setup Firebase realtime listeners
+  window.addEventListener('fb-ready',()=>{
+    const {db,ref,onValue}=window._fb;
+    // patients realtime
+    onValue(ref(db,'bhu/patients'), snap=>{
+      const data=snap.val();
+      if(data){
+        pts=Object.values(data);
+        localStorage.setItem('d4_p2',JSON.stringify(pts));
+        render();
+      }
+    });
+    // config realtime
+    onValue(ref(db,'bhu/config'), snap=>{
+      const data=snap.val();
+      if(data){cfg={...cfg,...data};localStorage.setItem('d4_c',JSON.stringify(cfg));}
+    });
+    // wards realtime
+    onValue(ref(db,'bhu/wards'), snap=>{
+      const data=snap.val();
+      if(data){
+        wards=Array.isArray(data)?data:Object.values(data);
+        localStorage.setItem('bhu_wards',JSON.stringify(wards));
+        renderWardSelect();
+      }
+    });
+    // staff realtime
+    onValue(ref(db,'bhu/staff'), snap=>{
+      const data=snap.val();
+      if(data){
+        staffList=Array.isArray(data)?data:Object.values(data);
+        localStorage.setItem('bhu_staff',JSON.stringify(staffList));
+      }
+    });
+    // log realtime (read-only here)
+    onValue(ref(db,'bhu/log'), snap=>{
+      const data=snap.val();
+      if(data){
+        ntfLog=Array.isArray(data)?data:Object.values(data);
+        localStorage.setItem('bhu_log',JSON.stringify(ntfLog));
+      }
+    });
+    // connection state dot
+    onValue(ref(db,'.info/connected'), snap=>{
+      const dot=document.getElementById('fbDot');
+      if(!dot)return;
+      if(snap.val()===true){
+        dot.style.background='#1A7742';
+        dot.title='Realtime: เชื่อมต่อแล้ว';
+      } else {
+        dot.style.background='#C41E2F';
+        dot.title='Realtime: ออฟไลน์';
+      }
+    });
+  },{once:true});
+}
+function sv(){
+  // keep localStorage as offline cache
+  localStorage.setItem('d4_p2',JSON.stringify(pts));
+  localStorage.setItem('d4_c',JSON.stringify(cfg));
+  // sync to Firebase
+  if(window._fb){
+    const {db,ref,set}=window._fb;
+    set(ref(db,'bhu/patients'), pts.reduce((acc,p)=>{acc[p.id]=p;return acc},{})).catch(e=>console.warn('FB write pts',e));
+    set(ref(db,'bhu/config'), cfg).catch(e=>console.warn('FB write cfg',e));
+  }
+}
 function uid(){return'P'+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
 function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 function ft(d){return d?new Date(d).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}):''}
