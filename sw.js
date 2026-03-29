@@ -1,8 +1,9 @@
-const CACHE_NAME = 'bhu-discharge-v1';
+const CACHE_NAME = 'bhu-discharge-v3';
 const URLS = [
   '/bhu-discharge/login.html',
   '/bhu-discharge/discharge-tracker.html',
-  '/bhu-discharge/admin.html'
+  '/bhu-discharge/admin.html',
+  '/bhu-discharge/manifest.json'
 ];
 
 self.addEventListener('install', e => {
@@ -17,8 +18,16 @@ self.addEventListener('activate', e => {
   self.clients.claim();
 });
 
+// Network-first: ดึงจากเน็ตก่อนเสมอ, fallback cache เมื่อออฟไลน์
 self.addEventListener('fetch', e => {
   e.respondWith(
-    fetch(e.request).catch(() => caches.match(e.request))
+    fetch(e.request)
+      .then(res => {
+        // อัปเดต cache ด้วยไฟล์ใหม่
+        const clone = res.clone();
+        caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
+        return res;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
