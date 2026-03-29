@@ -220,12 +220,23 @@ function doLogin(){
   document.getElementById('btnTxt').textContent='กำลังเข้าสู่ระบบ...';
   document.getElementById('btnArr').style.display='none';
   setTimeout(()=>{
-    // บันทึก role ลง sessionStorage เพื่อให้ระบบอื่นใช้ได้
+    // บันทึก role ลง sessionStorage
     sessionStorage.setItem('bhu_role', currentRole);
     sessionStorage.setItem('bhu_user', document.getElementById('inUser').value.trim());
-    if(currentRole==='admin') window.location.href='admin.html';
+    // แสดง success overlay
+    showLoginSuccess(currentRole);
+  },1200);
+}
+
+function showLoginSuccess(role){
+  const overlay = document.getElementById('loginOverlay');
+  const user = document.getElementById('inUser').value.trim();
+  document.getElementById('loginWelcome').textContent = 'ยินดีต้อนรับ ' + user + (role==='admin'?' (Admin)':'');
+  overlay.style.display = 'flex';
+  setTimeout(()=>{
+    if(role==='admin') window.location.href='admin.html';
     else window.location.href='discharge-tracker.html';
-  },1000);
+  },1800);
 }
 window.onload=()=>document.getElementById('inUser').focus();
 </script>
@@ -234,5 +245,23 @@ window.onload=()=>document.getElementById('inUser').focus();
       navigator.serviceWorker.register('/bhu-discharge/sw.js');
     }
   </script>
+
+<!-- Login Success Overlay -->
+<div id="loginOverlay" style="display:none;position:fixed;inset:0;background:#1B2E5C;z-index:9999;flex-direction:column;align-items:center;justify-content:center;gap:24px">
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23C41E2F'/%3E%3Cpath d='M30 50 L44 64 L70 38' stroke='white' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" style="width:72px;height:72px;animation:popIn .4s ease">
+  <div style="text-align:center">
+    <div style="color:#fff;font-size:22px;font-weight:800;font-family:'TH Niramit AS',sans-serif">เข้าสู่ระบบสำเร็จ</div>
+    <div id="loginWelcome" style="color:rgba(255,255,255,0.7);font-size:14px;margin-top:6px;font-family:'TH Niramit AS',sans-serif"></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.5);font-size:13px;font-family:'TH Niramit AS',sans-serif">
+    <div style="width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite"></div>
+    กำลังเข้าสู่ระบบ...
+  </div>
+</div>
+<style>
+@keyframes popIn{0%{transform:scale(0.5);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+
 </body>
 </html>
