@@ -82,10 +82,10 @@ body{font-family:'TH Niramit AS',sans-serif;background:#ECEEF2;color:var(--f6);f
 .dh-grid{display:flex;gap:28px;margin-top:8px;flex-wrap:wrap}
 .dh-it .dh-lb{font-size:12px;color:var(--f3);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
 .dh-it .dh-vl{font-size:13px;color:var(--f6);font-weight:700}
-.st-btn-ov{height:26px;padding:0 12px;border-radius:20px;border:none;background:linear-gradient(135deg,#C41E2F,#E53945);color:#fff;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit;box-shadow:0 2px 6px rgba(196,30,47,.3)}
-.st-btn-ov:hover{opacity:.85}
-.st-btn-rs{height:26px;padding:0 12px;border-radius:20px;border:1.5px solid #C8CDD6;background:#fff;color:#5A6478;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit;box-shadow:0 1px 3px rgba(0,0,0,.07)}
-.st-btn-rs:hover{opacity:.75}
+
+
+
+
 
 .pstrip{background:var(--w);border-bottom:1px solid var(--f2);padding:12px 24px}
 .ps-bar{display:flex;gap:2px}
@@ -574,7 +574,7 @@ body{font-family:'TH Niramit AS',sans-serif;background:#ECEEF2;color:var(--f6);f
           <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" id="exSt_active" checked style="accent-color:var(--bl)"> Active</label>
           <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" id="exSt_pending" checked style="accent-color:var(--wn)"> Pending</label>
           <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" id="exSt_completed" checked style="accent-color:var(--ok)"> Done</label>
-          <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" id="exSt_overdue" checked style="accent-color:var(--c2)"> Overdue</label>
+          
         </div>
       </div>
     </div>
@@ -742,7 +742,7 @@ function renderDailySum(){
     days.push(d);
   }
 
-  // For each day: admitted, discharged, overdue, active
+  // For each day: admitted, discharged, active
   const rows=days.map(d=>{
     const ds=d.toDateString();
     const added=pts.filter(p=>new Date(p.createdAt).toDateString()===ds).length;
@@ -754,9 +754,9 @@ function renderDailySum(){
 
   // Today's detail
   const today=new Date().toDateString();
-  const todayPts=pts.filter(p=>new Date(p.createdAt).toDateString()===today||p.status==='active'||p.status==='pending'||p.status==='overdue');
+  const todayPts=pts.filter(p=>new Date(p.createdAt).toDateString()===today||p.status==='active'||p.status==='pending');
   const todayDone=pts.filter(p=>p.status==='completed'&&new Date(p.updatedAt).toDateString()===today);
-  const overdue=pts.filter(p=>p.status==='overdue');
+  const overdue=[];
   const active=pts.filter(p=>p.status==='active');
   const pending=pts.filter(p=>p.status==='pending');
 
@@ -806,9 +806,8 @@ function renderDailySum(){
         <div style="font-size:26px;font-weight:800;color:#1A7742">${todayDone.length}</div>
         <div style="font-size:10px;color:#7A8394;font-weight:600;margin-top:2px">จำหน่ายวันนี้</div>
       </div>
-      <div style="background:${overdue.length?'#FCEAEC':'#F0F2F5'};border-radius:10px;padding:12px;text-align:center">
-        <div style="font-size:26px;font-weight:800;color:${overdue.length?'#C41E2F':'#AEB5C2'}">${overdue.length}</div>
-        <div style="font-size:10px;color:#7A8394;font-weight:600;margin-top:2px">เกินกำหนด</div>
+      <div style="background:'#F0F2F5';border-radius:10px;padding:12px;text-align:center">
+        <div style="font-size:26px;font-weight:800;color:'#F0F2F5'">0</div>
       </div>
     </div>
 
@@ -829,7 +828,7 @@ function renderDailySum(){
     ${(()=>{
       const wardMap={};
       pts.filter(p=>p.status!=='completed').forEach(p=>{
-        if(!wardMap[p.ward])wardMap[p.ward]={active:0,pending:0,overdue:0};
+        if(!wardMap[p.ward])wardMap[p.ward]={active:0,pending:0};
         wardMap[p.ward][p.status]=(wardMap[p.ward][p.status]||0)+1;
       });
       if(!Object.keys(wardMap).length)return'<div style="text-align:center;padding:16px;color:var(--f3);font-size:12px">ไม่มีผู้ป่วยที่ยังดูแลอยู่</div>';
@@ -839,16 +838,13 @@ function renderDailySum(){
           <div style="display:flex;gap:6px">
             ${s.active?`<span style="padding:2px 8px;border-radius:10px;background:#E4F0F9;color:#20639B;font-size:11px;font-weight:700">${s.active} active</span>`:''}
             ${s.pending?`<span style="padding:2px 8px;border-radius:10px;background:#FDF5DD;color:#A67B0A;font-size:11px;font-weight:700">${s.pending} pending</span>`:''}
-            ${s.overdue?`<span style="padding:2px 8px;border-radius:10px;background:#FCEAEC;color:#C41E2F;font-size:11px;font-weight:700">${s.overdue} overdue</span>`:''}
+            
           </div>
         </div>`).join('');
     })()}
 
-    <!-- Overdue List -->
-    ${overdue.length?`
-    <div style="font-size:12px;font-weight:700;color:#C41E2F;margin:12px 0 8px">ผู้ป่วยเกินกำหนด</div>
-    <div style="border:1px solid #FACECC;border-radius:8px;overflow:hidden">
-      ${overdue.map(ptRows).join('')}
+
+    '#F0F2F5'
     </div>`:''}
 
     <!-- Print Daily Summary Button -->
@@ -863,9 +859,9 @@ function printDailySummary(){
   const todayLabel=today.toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   const active=pts.filter(p=>p.status==='active');
   const pending=pts.filter(p=>p.status==='pending');
-  const overdue=pts.filter(p=>p.status==='overdue');
+  const overdue=[];
   const done=pts.filter(p=>p.status==='completed'&&new Date(p.updatedAt).toDateString()===todayStr);
-  const allActive=[...overdue,...active,...pending];
+  const allActive=[...active,...pending];
 
   const ptRow=p=>{const pr=prg(p);return`
     <tr>
@@ -874,7 +870,7 @@ function printDailySummary(){
       <td>${esc(p.ward)} ${esc(p.room)}</td>
       <td>${esc(p.doctor||'-')}</td>
       <td>${fd(p.dischargeDate)}</td>
-      <td style="text-align:center;font-weight:700;color:${p.status==='overdue'?'#C41E2F':p.status==='active'?'#20639B':'#A67B0A'}">${sl(p.status)}</td>
+      <td style="text-align:center;font-weight:700;color:${p.status==='active'?'#20639B':'#A67B0A'}">${sl(p.status)}</td>
       <td style="text-align:center">${pr.pct}%</td>
     </tr>`;};
 
@@ -910,7 +906,6 @@ tr:nth-child(even) td{background:#FAFBFC}
     <div class="card"><div class="n" style="color:#20639B">${active.length}</div><div class="l">กำลังดำเนินการ</div></div>
     <div class="card"><div class="n" style="color:#A67B0A">${pending.length}</div><div class="l">รอดำเนินการ</div></div>
     <div class="card"><div class="n" style="color:#1A7742">${done.length}</div><div class="l">จำหน่ายวันนี้</div></div>
-    <div class="card"><div class="n" style="color:${overdue.length?'#C41E2F':'#AEB5C2'}">${overdue.length}</div><div class="l">เกินกำหนด</div></div>
   </div>
   ${allActive.length?`
   <div class="sec">ผู้ป่วยที่ยังดูแลอยู่ (${allActive.length} ราย)</div>
@@ -930,9 +925,9 @@ function renderDashboard(){
   const today=new Date().toDateString();
   const todayDone=pts.filter(p=>p.status==='completed'&&new Date(p.updatedAt).toDateString()===today).length;
   const wardStats={};
-  pts.forEach(p=>{if(!wardStats[p.ward])wardStats[p.ward]={total:0,active:0,pending:0,done:0,overdue:0};wardStats[p.ward].total++;wardStats[p.ward][p.status]=(wardStats[p.ward][p.status]||0)+1;});
+  pts.forEach(p=>{if(!wardStats[p.ward])wardStats[p.ward]={total:0,active:0,pending:0,done:0};wardStats[p.ward].total++;wardStats[p.ward][p.status]=(wardStats[p.ward][p.status]||0)+1;});
   const avgPct=pts.length?Math.round(pts.reduce((s,p)=>s+prg(p).pct,0)/pts.length):0;
-  const overdue=pts.filter(p=>p.status==='overdue').length;
+  const overdue=[];
   el.innerHTML=`
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
       <div style="background:#EBF0F7;border-radius:10px;padding:14px;text-align:center">
@@ -943,9 +938,8 @@ function renderDashboard(){
         <div style="font-size:28px;font-weight:800;color:#1A7742">${todayDone}</div>
         <div style="font-size:11px;color:#7A8394;font-weight:600">Discharge วันนี้</div>
       </div>
-      <div style="background:${overdue?'#FCEAEC':'#F0F2F5'};border-radius:10px;padding:14px;text-align:center">
-        <div style="font-size:28px;font-weight:800;color:${overdue?'#C41E2F':'#AEB5C2'}">${overdue}</div>
-        <div style="font-size:11px;color:#7A8394;font-weight:600">เกินกำหนด</div>
+      <div style="background:'#F0F2F5';border-radius:10px;padding:14px;text-align:center">
+        <div style="font-size:28px;font-weight:800;color:'#F0F2F5'">0</div>
       </div>
     </div>
     <div style="background:#F0F2F5;border-radius:10px;padding:14px;margin-bottom:16px">
@@ -1217,6 +1211,7 @@ function ld(){
         const data = snap.val();
         if(data && typeof data === 'object'){
           pts=Object.values(data);
+          pts.forEach(p=>{if(p.status==='overdue')p.status='pending';});
           localStorage.setItem('d4_p2',JSON.stringify(pts));
           if(!_saving) render();
         } else {
@@ -1281,24 +1276,11 @@ function fd(d){return d?new Date(d).toLocaleDateString('th-TH',{day:'2-digit',mo
 function mkCl(){return ST.map(s=>({...s,items:s.items.map(i=>({...i,ck:false,at:null}))}))}
 function prg(p){let t=0,d=0;p.checklist.forEach(s=>{t+=s.items.length;d+=s.items.filter(i=>i.ck).length});return{t,d,pct:t?Math.round(d/t*100):0}}
 function sp(s){const t=s.items.length,d=s.items.filter(i=>i.ck).length;return{t,d,dn:t===d}}
-function sl(s){return{pending:'Pending',active:'Active',completed:'Done',overdue:'Overdue'}[s]||s}
+function sl(s){return{pending:'Pending',active:'Active',completed:'Done'}[s]||s}
 
-function render(){rList();rCnt();if(sel)rDet();updOverdueBadge();}
+function render(){rList();rCnt();if(sel)rDet();}
 
-// checkOverdue อัตโนมัติถูกปิดแล้ว — admin ต้องกด Set Overdue เองจาก detail panel
-function updOverdueBadge(){
-  const cnt=pts.filter(p=>p.status==='overdue').length;
-  let badge=document.getElementById('overdueB');
-  if(!badge){
-    badge=document.createElement('span');
-    badge.id='overdueB';
-    badge.style.cssText='position:absolute;top:-4px;right:-4px;background:#C41E2F;color:#fff;font-size:10px;font-weight:800;border-radius:10px;padding:1px 5px;min-width:16px;text-align:center;display:none';
-    const bellBtn=document.querySelector('[title="ประวัติการแจ้งเตือน"]');
-    if(bellBtn){bellBtn.style.position='relative';bellBtn.appendChild(badge);}
-  }
-  if(cnt>0){badge.textContent=cnt;badge.style.display='block';}
-  else{badge.style.display='none';}
-}
+
 function rCnt(){
   document.getElementById('cA').textContent=pts.length;
   document.getElementById('cP').textContent=pts.filter(p=>p.status==='active').length;
@@ -1308,7 +1290,6 @@ function rCnt(){
 function countdown(d){
   if(!d)return'';
   const diff=new Date(d)-new Date();
-  if(diff<0)return`<span style="color:var(--c2);font-size:11px;font-weight:700">เกินกำหนด</span>`;
   const h=Math.floor(diff/36e5);
   if(h<1)return`<span style="color:#A67B0A;font-size:11px;font-weight:700">&lt;1 ชม.</span>`;
   if(h<24)return`<span style="color:#A67B0A;font-size:11px;font-weight:700">${h} ชม.</span>`;
@@ -1329,7 +1310,7 @@ function rList(){
   if(!f.length){el.innerHTML='<div style="text-align:center;padding:36px 16px;color:var(--f3);font-size:12px">No patients</div>';return}
   el.innerHTML=f.map(p=>{
     const pr=prg(p),sc=p.id===sel?'sel':'',
-    pc=p.status==='completed'?'background:var(--ok)':p.status==='active'?'background:var(--bl)':p.status==='overdue'?'background:var(--c2)':'background:var(--f2)',
+    pc=p.status==='completed'?'background:var(--ok)':p.status==='active'?'background:var(--bl)':'background:var(--f2)',
     stc='st-'+p.status[0];
     return`<div class="pc ${sc}" onclick="selP('${p.id}')"><div class="pc-row"><div><div class="pc-nm">${esc(p.name)}</div><div class="pc-hn">HN: ${esc(p.hn)}</div></div><span class="pc-st ${stc}">${sl(p.status)}</span></div><div class="pc-info"><span>${esc(p.ward)} ${esc(p.room)}</span><span>${esc(p.doctor||'')}</span><span style="margin-left:auto">${pr.pct}%</span></div>${p.dischargeDate?`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:11px;color:var(--f3)">Discharge ${fd(p.dischargeDate).split(' ')[0]}</span>${countdown(p.dischargeDate)}</div>`:''}<div class="pc-bar"><div class="pc-fill" style="width:${pr.pct}%;${pc}"></div></div></div>`
   }).join('');
@@ -1364,7 +1345,7 @@ function rDet(){
       </div>`).join('');
     return`<div class="cl-s" id="s-${s.id}"><div class="cl-sh" onclick="togS(this)"><div class="cl-sl"><div class="cl-n ${nc}">${s.id}</div><div><div class="cl-st">${esc(s.th)}</div><div class="cl-se">${esc(s.t)}</div></div></div><div class="cl-sr"><span class="cl-sc ${cc}">${s2.d}/${s2.t}</span><svg class="cl-ar ${openSecs.has('s-'+s.id)?'op':''}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div></div><div class="cl-bd ${openSecs.has('s-'+s.id)?'op':''}">${items}</div></div>`
   }).join('');
-  mp.innerHTML=`<div class="dh"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div class="dh-nm">${esc(p.name)}</div></div><div class="dh-grid"><div class="dh-it"><div class="dh-lb">HN</div><div class="dh-vl">${esc(p.hn)}</div></div><div class="dh-it"><div class="dh-lb">Ward/Room</div><div class="dh-vl">${esc(p.ward)} ${esc(p.room)}</div></div><div class="dh-it"><div class="dh-lb">Physician</div><div class="dh-vl">${esc(p.doctor||'-')}</div></div><div class="dh-it"><div class="dh-lb">Discharge</div><div class="dh-vl">${fd(p.dischargeDate)}</div></div><div class="dh-it"><div class="dh-lb">Status</div><div class="dh-vl" style="display:flex;align-items:center;gap:8px"><span class="pc-st st-${p.status[0]}">${sl(p.status)}</span><button class="st-btn-ov" data-pid="${p.id}" title="ตั้งเป็น Overdue">⚠ Overdue</button><button class="st-btn-rs" data-pid="${p.id}" title="รีเซ็ต Status">↺ Reset</button></div></div><div class="dh-it" style="display:flex;align-items:flex-end"><button class="b b-g" style="font-size:13px;padding:6px 16px" onclick="manualNtf()">แจ้งภาพรวม</button></div></div></div><div class="pstrip"><div class="ps-bar">${segs}</div><div class="ps-info"><span>Step 1</span><span>${pr.d}/${pr.t} (${pr.pct}%)</span><span>Step 10</span></div></div><div class="cl-scroll">${secs}</div><div class="bbar"><div class="bbar-l"><div class="btn-grp"><button class="b b-o b-s" onclick="openModal('expM')">Export</button><button class="b b-o b-s" onclick="printSummary('${p.id}')">Print</button></div></div><div class="bbar-r"><button class="b b-1 b-s" onclick="openEditModal('${p.id}')">Edit</button><button class="b b-2 b-s" onclick="cfmDel()">Delete</button><button class="b b-g b-s" onclick="compAll()">Complete Discharge</button></div></div>`;
+  mp.innerHTML=`<div class="dh"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div class="dh-nm">${esc(p.name)}</div></div><div class="dh-grid"><div class="dh-it"><div class="dh-lb">HN</div><div class="dh-vl">${esc(p.hn)}</div></div><div class="dh-it"><div class="dh-lb">Ward/Room</div><div class="dh-vl">${esc(p.ward)} ${esc(p.room)}</div></div><div class="dh-it"><div class="dh-lb">Physician</div><div class="dh-vl">${esc(p.doctor||'-')}</div></div><div class="dh-it"><div class="dh-lb">Discharge</div><div class="dh-vl">${fd(p.dischargeDate)}</div></div><div class="dh-it"><div class="dh-lb">Status</div><div class="dh-vl" style="display:flex;align-items:center;gap:8px"><span class="pc-st st-${p.status[0]}">${sl(p.status)}</span></div></div><div class="dh-it" style="display:flex;align-items:flex-end"><button class="b b-g" style="font-size:13px;padding:6px 16px" onclick="manualNtf()">แจ้งภาพรวม</button></div></div></div><div class="pstrip"><div class="ps-bar">${segs}</div><div class="ps-info"><span>Step 1</span><span>${pr.d}/${pr.t} (${pr.pct}%)</span><span>Step 10</span></div></div><div class="cl-scroll">${secs}</div><div class="bbar"><div class="bbar-l"><div class="btn-grp"><button class="b b-o b-s" onclick="openModal('expM')">Export</button><button class="b b-o b-s" onclick="printSummary('${p.id}')">Print</button></div></div><div class="bbar-r"><button class="b b-1 b-s" onclick="openEditModal('${p.id}')">Edit</button><button class="b b-2 b-s" onclick="cfmDel()">Delete</button><button class="b b-g b-s" onclick="compAll()">Complete Discharge</button></div></div>`;
   if(mp&&_st)requestAnimationFrame(()=>{mp.scrollTop=_st;});
 }
 
@@ -1482,7 +1463,7 @@ function togI(pid,sid,iid){
     else{const sc=secEl.querySelector('.cl-sc');if(sc)sc.classList.remove('ad');}
   }
   // update progress bar
-  rList();rCnt();updOverdueBadge();
+  rList();rCnt();
   // ส่ง LINE เฉพาะเมื่อ section นี้ครบทุก item (ไม่ใช่ uncheck)
   const sec=sp(s);
   if(i.ck && sec.dn){
@@ -1614,12 +1595,7 @@ function saveEdit(){
 
 function compAll(){
 
-function setOverdue(pid){
-  const p=pts.find(x=>x.id===pid);if(!p)return;
-  if(p.status==='completed'){toast('ไม่สามารถตั้งได้','ผู้ป่วยที่ Completed แล้วไม่สามารถตั้ง Overdue ได้','e');return;}
-  p.status='overdue';p.updatedAt=new Date().toISOString();
-  sv();render();toast('ตั้ง Overdue แล้ว',p.name,'w');
-}
+
 
 function resetStatus(pid){
   const p=pts.find(x=>x.id===pid);if(!p)return;
@@ -1718,7 +1694,7 @@ function setExpPreset(p,btn){
   document.getElementById('expCustomDates').style.display=p==='custom'?'block':'none';
 }
 function getExpPts(){
-  const stChecks=['active','pending','completed','overdue'].filter(s=>document.getElementById('exSt_'+s)?.checked);
+  const stChecks=['active','pending','completed'].filter(s=>document.getElementById('exSt_'+s)?.checked);
   let filtered=pts.filter(p=>stChecks.includes(p.status));
   const now=new Date();
   if(expPreset==='today'){const t=now.toDateString();filtered=filtered.filter(p=>new Date(p.createdAt).toDateString()===t);}
@@ -1751,7 +1727,7 @@ function expCSV(data){
 function expPDF(data){
   const now=new Date();
   const label=now.toLocaleDateString('th-TH',{day:'numeric',month:'long',year:'numeric'});
-  const ptRow=p=>{const pr=prg(p);return`<tr><td>${esc(p.name)}</td><td style="font-family:monospace">${esc(p.hn)}</td><td>${esc(p.ward)}</td><td>${esc(p.room)}</td><td>${esc(p.doctor||'-')}</td><td style="font-weight:700;color:${p.status==='completed'?'#1A7742':p.status==='overdue'?'#C41E2F':p.status==='active'?'#20639B':'#A67B0A'}">${sl(p.status)}</td><td style="text-align:center">${pr.pct}%</td><td>${p.dischargeDate?fd(p.dischargeDate):'-'}</td></tr>`;};
+  const ptRow=p=>{const pr=prg(p);return`<tr><td>${esc(p.name)}</td><td style="font-family:monospace">${esc(p.hn)}</td><td>${esc(p.ward)}</td><td>${esc(p.room)}</td><td>${esc(p.doctor||'-')}</td><td style="font-weight:700;color:${p.status==='completed'?'#1A7742':p.status==='active'?'#20639B':'#A67B0A'}">${sl(p.status)}</td><td style="text-align:center">${pr.pct}%</td><td>${p.dischargeDate?fd(p.dischargeDate):'-'}</td></tr>`;};
   const w=window.open('','_blank','width=1050,height=800');
   w.document.write(`<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><title>Discharge Export</title>
 <link href="https://fonts.cdnfonts.com/css/th-niramit-as" rel="stylesheet">
@@ -1816,13 +1792,7 @@ document.addEventListener('DOMContentLoaded',function(){
   clock();setInterval(clock,1e3);
   setInterval(()=>{render();},60e3);
 });
-// event delegation สำหรับปุ่ม Overdue/Reset ใน detail panel
-document.getElementById('mP').addEventListener('click',function(e){
-  const ov=e.target.closest('.st-btn-ov');
-  const rs=e.target.closest('.st-btn-rs');
-  if(ov){e.stopPropagation();setOverdue(ov.dataset.pid);}
-  if(rs){e.stopPropagation();resetStatus(rs.dataset.pid);}
-});
+
 // ปรับ Settings button ตาม role — จัดการใน DOMContentLoaded แล้ว
 </script>
 </body>
