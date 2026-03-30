@@ -1232,7 +1232,7 @@ function ld(){
     });
     // wards realtime
     onValue(ref(db,'bhu/wards'), snap=>{
-      try{const data=snap.val();if(data){wards=Array.isArray(data)?data:Object.values(data);localStorage.setItem('bhu_wards',JSON.stringify(wards));renderWardSelect();}}catch(e){console.warn('wards listener',e);}
+      try{const data=snap.val();if(data){const raw=Array.isArray(data)?data:Object.values(data);wards=raw.map(w=>typeof w==='string'?w:(w&&(w.name||w.ward||w.value||w.id||Object.values(w)[0])||'').toString()).filter(w=>w&&w!=='[object Object]');localStorage.setItem('bhu_wards',JSON.stringify(wards));renderWardSelect();}}catch(e){console.warn('wards listener',e);}
     });
     // staff realtime
     onValue(ref(db,'bhu/staff'), snap=>{
