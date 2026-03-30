@@ -1205,6 +1205,7 @@ function ld(){
   // load from localStorage first (instant)
   try{pts=JSON.parse(localStorage.getItem('d4_p2')||'[]')}catch(e){}
   try{cfg=JSON.parse(localStorage.getItem('d4_c')||JSON.stringify(cfg))}catch(e){}
+  render(); // แสดง cache ทันที
   // then setup Firebase realtime listeners
   // รอ Firebase พร้อม แล้วค่อย setup listeners
   function setupFbListeners(){
@@ -1804,7 +1805,17 @@ function closeMobPanel(){
   document.getElementById('mobOverlay').classList.remove('on');
 }
 
-ld();ldWards();ldLog();ldStaff();demo();render();renderWardSelect();clock();setInterval(clock,1e3);setInterval(()=>{render();},60e3);
+document.addEventListener('DOMContentLoaded',function(){
+  // auth check
+  const role=sessionStorage.getItem('bhu_role')||localStorage.getItem('bhu_role');
+  if(!role){window.location.href='login.html';return;}
+  if(role==='admin'){const ap=document.getElementById('btnAdminPanel');if(ap)ap.style.display='inline-flex';}
+  // init
+  ldWards();ldLog();ldStaff();renderWardSelect();
+  ld(); // ld() จะเรียก render() เองหลัง Firebase โหลด
+  clock();setInterval(clock,1e3);
+  setInterval(()=>{render();},60e3);
+});
 // event delegation สำหรับปุ่ม Overdue/Reset ใน detail panel
 document.getElementById('mP').addEventListener('click',function(e){
   const ov=e.target.closest('.st-btn-ov');
@@ -1812,19 +1823,7 @@ document.getElementById('mP').addEventListener('click',function(e){
   if(ov){e.stopPropagation();setOverdue(ov.dataset.pid);}
   if(rs){e.stopPropagation();resetStatus(rs.dataset.pid);}
 });
-// ปรับ Settings button ตาม role
-(function(){
-  const role = sessionStorage.getItem('bhu_role');
-  const btn = document.querySelector('.tb[onclick="openSettings()"]');
-  if(btn && role !== 'admin'){
-    btn.style.opacity = '0.4';
-    btn.title = 'เฉพาะ Admin เท่านั้น';
-  }
-  if(role === 'admin'){
-    const ap = document.getElementById('btnAdminPanel');
-    if(ap) ap.style.display = 'inline-flex';
-  }
-})();
+// ปรับ Settings button ตาม role — จัดการใน DOMContentLoaded แล้ว
 </script>
 </body>
 </html>
