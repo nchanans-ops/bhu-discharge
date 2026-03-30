@@ -806,8 +806,9 @@ function renderDailySum(){
         <div style="font-size:26px;font-weight:800;color:#1A7742">${todayDone.length}</div>
         <div style="font-size:10px;color:#7A8394;font-weight:600;margin-top:2px">จำหน่ายวันนี้</div>
       </div>
-      <div style="background:'#F0F2F5';border-radius:10px;padding:12px;text-align:center">
-        <div style="font-size:26px;font-weight:800;color:'#F0F2F5'">0</div>
+      <div style="background:#F0F2F5;border-radius:10px;padding:12px;text-align:center">
+        <div style="font-size:26px;font-weight:800;color:#1B2E5C">${pts.filter(p=>p.status==='completed').length}</div>
+        <div style="font-size:10px;color:#7A8394;font-weight:600;margin-top:2px">จำหน่ายทั้งหมด</div>
       </div>
     </div>
 
@@ -843,9 +844,7 @@ function renderDailySum(){
         </div>`).join('');
     })()}
 
-
-    '#F0F2F5'
-    </div>`:''}
+    <!-- Print Daily Summary Button -->
 
     <!-- Print Daily Summary Button -->
     <div style="margin-top:16px;text-align:right">
