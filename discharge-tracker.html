@@ -1310,7 +1310,7 @@ function rList(){
     const pr=prg(p),sc=p.id===sel?'sel':'',
     pc=p.status==='completed'?'background:var(--ok)':p.status==='active'?'background:var(--bl)':'background:var(--f2)',
     stc='st-'+p.status[0];
-    return`<div class="pc ${sc}" onclick="selP('${p.id}')"><div class="pc-row"><div><div class="pc-nm">${esc(p.name)}</div><div class="pc-hn">HN: ${esc(p.hn)}</div></div><span class="pc-st ${stc}">${sl(p.status)}</span></div><div class="pc-info"><span>${esc(p.ward)} ${esc(p.room)}</span><span>${esc(p.doctor||'')}</span><span style="margin-left:auto">${pr.pct}%</span></div>${p.dischargeDate?`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:11px;color:var(--f3)">Discharge ${fd(p.dischargeDate).split(' ')[0]}</span>${countdown(p.dischargeDate)}</div>`:''}<div class="pc-bar"><div class="pc-fill" style="width:${pr.pct}%;${pc}"></div></div></div>`
+    return`<div class="pc ${sc}" onclick="selP('${p.id}')"><div class="pc-row"><div><div class="pc-nm">${esc(p.name)}</div><div class="pc-hn">HN: ${esc(p.hn)}</div></div><span class="pc-st ${stc}">${sl(p.status)}</span></div><div class="pc-info"><span>${esc(p.ward)} ${esc(p.room)}</span><span>${esc(p.doctor||'')}</span><span style="margin-left:auto">${pr.pct}%</span></div>${p.dischargeDate?`<div style="margin-bottom:4px"><span style="font-size:11px;color:var(--f3)">Discharge ${fd(p.dischargeDate).split(' ')[0]}</span></div>`:''}<div class="pc-bar"><div class="pc-fill" style="width:${pr.pct}%;${pc}"></div></div></div>`
   }).join('');
 }
 
