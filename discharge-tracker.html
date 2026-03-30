@@ -1199,33 +1199,28 @@ function doLogout(){
   window.location.href='login.html';
 }
 function ld(){
-  // load from localStorage first (instant)
-  try{pts=JSON.parse(localStorage.getItem('d4_p2')||'[]')}catch(e){}
+  // โหลด cache จาก localStorage ก่อน (instant)
+  try{
+    const cached=JSON.parse(localStorage.getItem('d4_p2')||'[]');
+    if(Array.isArray(cached)&&cached.length>0){pts=cached;render();}
+  }catch(e){localStorage.removeItem('d4_p2');}
   try{cfg=JSON.parse(localStorage.getItem('d4_c')||JSON.stringify(cfg))}catch(e){}
-  render(); // แสดง cache ทันที
-  // then setup Firebase realtime listeners
-  // รอ Firebase พร้อม แล้วค่อย setup listeners
+  // รอ Firebase แล้ว setup realtime listeners
   function setupFbListeners(){
-    if(!window._fb){ setTimeout(setupFbListeners, 100); return; }
+    if(!window._fb){setTimeout(setupFbListeners,100);return;}
     const {db,ref,onValue}=window._fb;
     // patients realtime
     onValue(ref(db,'bhu/patients'), snap=>{
       try{
         const data = snap.val();
-        if(data && typeof data === 'object'){
+        if(data && typeof data === 'object' && Object.keys(data).length > 0){
           pts=Object.values(data);
           pts.forEach(p=>{if(p.status==='overdue')p.status='pending';});
           localStorage.setItem('d4_p2',JSON.stringify(pts));
           if(!_saving) render();
         } else {
-          // Firebase ว่าง - โหลด demo data แล้ว seed ขึ้น Firebase
-          demo();
-          if(pts.length){
-            const {set}=window._fb;
-            _saving=true;setTimeout(()=>{_saving=false;},2000);
-    set(ref(db,'bhu/patients'), pts.reduce((acc,p)=>{acc[p.id]=p;return acc},{}))
-              .catch(e=>console.warn('seed',e));
-          }
+          // Firebase ว่างจริงๆ (ไม่มีข้อมูลเลย) - ใช้ demo เฉพาะครั้งแรก ไม่ seed ขึ้น Firebase
+          if(!pts.length) { demo(); render(); }
         }
       }catch(e){console.warn('patients listener',e);}
     });
@@ -1772,7 +1767,8 @@ function demo(){
     const cl=mkCl();let c=0;
     for(const s of cl)for(const i of s.items)if(c<x.dn){i.ck=true;i.at=new Date(Date.now()-Math.random()*72e5).toISOString();c++}
     pts.push({id:uid()+Math.random().toString(36).slice(2,4),name:x.n,hn:x.h,ward:x.w,room:x.r,doctor:x.d,dischargeDate:new Date(Date.now()+36e5*(2+Math.random()*4)).toISOString(),notes:'',status:x.s,createdAt:new Date(Date.now()-36e5*4).toISOString(),updatedAt:new Date().toISOString(),checklist:cl});
-  });sv();
+  });
+  // ไม่ sv() — demo ไม่ overwrite Firebase
 }
 
 function toggleMobPanel(){
