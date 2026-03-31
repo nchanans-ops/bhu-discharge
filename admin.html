@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Admin Panel | Bangkok Hospital Udon</title>
-<link href="https://fonts.cdnfonts.com/css/th-niramit-as" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -16,44 +16,45 @@
   --white:#fff;
   --r8:8px;--r12:12px;--r16:16px;
 }
-body{font-family:'TH Niramit AS',sans-serif;background:var(--f0);color:var(--f6);font-size:13px;min-height:100vh;display:flex;flex-direction:column}
+body{font-family:'Poppins','Kanit',sans-serif;background:#F0F2F7;color:var(--f6);font-size:13px;min-height:100vh;display:flex;flex-direction:column;font-weight:300}
 
 /* ── TOP BAR ── */
 .topbar{
-  background:var(--navy-d);
-  border-bottom:4px solid var(--red);
-  height:62px;display:flex;align-items:center;
-  padding:0 32px;gap:0;
+  background:#fff;
+  border-bottom:2px solid var(--red);
+  height:56px;display:flex;align-items:center;
+  padding:0 24px;gap:0;
   position:sticky;top:0;z-index:200;
-  flex-shrink:0;
+  flex-shrink:0;box-shadow:0 1px 6px rgba(0,0,0,.06);
 }
-.tb-brand{display:flex;align-items:center;gap:12px;padding-right:24px;border-right:1px solid rgba(255,255,255,.1)}
+.tb-brand{display:flex;align-items:center;gap:12px;padding-right:20px;border-right:1px solid var(--f2)}
 .tb-logo{
-  width:38px;height:38px;border-radius:10px;
+  width:36px;height:36px;border-radius:10px;
   background:var(--red);
   display:flex;align-items:center;justify-content:center;
   flex-shrink:0;
 }
-.tb-brand-text .h{font-size:13px;font-weight:800;color:#fff;letter-spacing:.5px;line-height:1.2}
-.tb-brand-text .s{font-size:9px;color:rgba(255,255,255,.35);letter-spacing:1px;text-transform:uppercase;margin-top:1px}
-.tb-section{padding:0 24px;font-size:12px;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:.3px}
+.tb-brand-text .h{font-size:12px;font-weight:600;color:var(--navy);letter-spacing:.3px;line-height:1.2}
+.tb-brand-text .s{font-size:9px;color:var(--f3);letter-spacing:.8px;text-transform:uppercase;margin-top:1px}
+.tb-section{padding:0 20px;font-size:12px;font-weight:500;color:var(--f4);letter-spacing:.2px}
 .tb-right{margin-left:auto;display:flex;align-items:center;gap:8px}
 .tb-pill{
   display:flex;align-items:center;gap:7px;
-  padding:6px 14px;border-radius:8px;
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(255,255,255,.06);
+  padding:5px 14px;border-radius:20px;
+  border:1px solid var(--f2);
+  background:0;
   cursor:pointer;transition:.15s;font-family:inherit;
 }
-.tb-pill:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2)}
-.tb-pill span{font-size:12px;font-weight:600;color:rgba(255,255,255,.75)}
-.tb-pill.red-tint{border-color:rgba(196,30,47,.35);background:rgba(196,30,47,.12)}
-.tb-pill.red-tint:hover{background:rgba(196,30,47,.2)}
+.tb-pill:hover{background:var(--f0);border-color:var(--f3)}
+.tb-pill span{font-size:12px;font-weight:400;color:var(--f5)}
+.tb-pill.red-tint{border-color:#F5C0C6;background:#FEF5F5}
+.tb-pill.red-tint span{color:var(--red)}
+.tb-pill.red-tint:hover{background:#FDD9DD}
 .tb-avatar{
-  width:30px;height:30px;border-radius:8px;
-  background:linear-gradient(135deg,var(--navy-l),var(--navy));
+  width:30px;height:30px;border-radius:50%;
+  background:var(--navy);
   display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:800;color:#fff;flex-shrink:0;
+  font-size:11px;font-weight:600;color:#fff;flex-shrink:0;
 }
 
 /* ── LAYOUT ── */
@@ -61,39 +62,39 @@ body{font-family:'TH Niramit AS',sans-serif;background:var(--f0);color:var(--f6)
 
 /* ── SIDEBAR ── */
 .sidebar{
-  width:240px;background:var(--white);
-  border-right:1px solid var(--f2);
+  width:220px;background:#fff;
+  border-right:1px solid #e8eaf0;
   display:flex;flex-direction:column;
   overflow-y:auto;flex-shrink:0;
 }
 .sb-section{
-  font-size:9px;font-weight:700;color:var(--f3);
-  letter-spacing:1px;text-transform:uppercase;
-  padding:16px 22px 6px;
+  font-size:9px;font-weight:500;color:var(--f3);
+  letter-spacing:.8px;text-transform:uppercase;
+  padding:16px 18px 6px;
 }
 .sb-item{
   display:flex;align-items:center;gap:10px;
-  padding:10px 22px;cursor:pointer;
-  font-size:13px;font-weight:600;color:var(--f4);
+  padding:9px 18px;cursor:pointer;
+  font-size:13px;font-weight:400;color:var(--f4);
   transition:.12s;border-left:3px solid transparent;
   text-decoration:none;user-select:none;
 }
 .sb-item:hover{background:var(--navy-2xl);color:var(--navy)}
 .sb-item.on{
-  background:var(--navy-xl);color:var(--navy);
-  border-left-color:var(--red);font-weight:700;
+  background:#EBF0F7;color:var(--navy);
+  border-left-color:var(--red);font-weight:500;
 }
 .sb-item svg{flex-shrink:0;width:15px;height:15px}
 .sb-item.on svg{color:var(--red)}
 .sb-count{
   margin-left:auto;background:var(--navy);color:#fff;
-  font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;
+  font-size:10px;font-weight:500;padding:1px 7px;border-radius:20px;
   min-width:20px;text-align:center;
 }
 .sb-item.on .sb-count{background:var(--red)}
 .sb-foot{
-  margin-top:auto;padding:16px 22px;
-  border-top:1px solid var(--f1);
+  margin-top:auto;padding:14px 18px;
+  border-top:1px solid #e8eaf0;
   font-size:11px;color:var(--f3);line-height:1.6;
 }
 
@@ -104,45 +105,46 @@ body{font-family:'TH Niramit AS',sans-serif;background:var(--f0);color:var(--f6)
 @keyframes pgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 /* ── PAGE HEADER ── */
-.pg-hdr{margin-bottom:28px}
+.pg-hdr{margin-bottom:24px}
 .pg-hdr-row{display:flex;align-items:flex-end;justify-content:space-between}
-.pg-title{font-size:22px;font-weight:800;color:var(--navy);letter-spacing:-.3px}
-.pg-subtitle{font-size:12px;color:var(--f3);margin-top:3px}
+.pg-title{font-size:20px;font-weight:600;color:var(--navy);letter-spacing:-.3px}
+.pg-subtitle{font-size:12px;color:var(--f3);margin-top:3px;font-weight:300}
 
 /* ── STAT GRID ── */
-.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
 .stat-card{
-  background:var(--white);border-radius:var(--r16);
-  border:1px solid var(--f2);
-  padding:22px 24px;
+  background:#fff;border-radius:12px;
+  border:1px solid #e8eaf0;
+  padding:20px 22px;
   position:relative;overflow:hidden;
   transition:.2s;cursor:default;
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
 }
-.stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(14,27,56,.1)}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(27,46,92,.1)}
 .stat-card::before{
   content:'';position:absolute;top:0;left:0;right:0;height:3px;
 }
-.stat-card:nth-child(1)::before{background:linear-gradient(90deg,var(--navy),var(--navy-l))}
-.stat-card:nth-child(2)::before{background:linear-gradient(90deg,#20639B,#4A9ECC)}
-.stat-card:nth-child(3)::before{background:linear-gradient(90deg,var(--red),var(--red-l))}
+.stat-card:nth-child(1)::before{background:var(--navy)}
+.stat-card:nth-child(2)::before{background:#20639B}
+.stat-card:nth-child(3)::before{background:var(--red)}
 .stat-icon{
-  width:44px;height:44px;border-radius:12px;
+  width:40px;height:40px;border-radius:10px;
   display:flex;align-items:center;justify-content:center;
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
-.stat-num{font-size:32px;font-weight:800;color:var(--navy);line-height:1;letter-spacing:-1px}
-.stat-label{font-size:11px;font-weight:700;color:var(--f3);margin-top:4px;letter-spacing:.4px;text-transform:uppercase}
+.stat-num{font-size:28px;font-weight:600;color:var(--navy);line-height:1;letter-spacing:-1px}
+.stat-label{font-size:10px;font-weight:500;color:var(--f3);margin-top:4px;letter-spacing:.4px;text-transform:uppercase}
 
 /* ── TABLE CARD ── */
-.tcard{background:var(--white);border-radius:var(--r16);border:1px solid var(--f2);overflow:hidden}
+.tcard{background:#fff;border-radius:12px;border:1px solid #e8eaf0;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .tcard-hdr{
-  padding:18px 24px;display:flex;align-items:center;justify-content:space-between;
-  border-bottom:1px solid var(--f1);
+  padding:16px 20px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid #e8eaf0;
 }
-.tcard-title{font-size:15px;font-weight:800;color:var(--navy)}
+.tcard-title{font-size:14px;font-weight:600;color:var(--navy)}
 .tcard-search{
-  padding:12px 24px;border-bottom:1px solid var(--f1);
-  display:flex;align-items:center;gap:10px;background:var(--f0);
+  padding:10px 20px;border-bottom:1px solid #e8eaf0;
+  display:flex;align-items:center;gap:10px;background:#f7f8fc;
 }
 .tcard-search svg{flex-shrink:0;color:var(--f3)}
 .tcard-search input{
@@ -152,103 +154,103 @@ body{font-family:'TH Niramit AS',sans-serif;background:var(--f0);color:var(--f6)
 .tcard-search input::placeholder{color:var(--f3)}
 
 table{width:100%;border-collapse:collapse}
-thead{background:var(--f0);border-bottom:2px solid var(--f2)}
-th{padding:11px 20px;text-align:left;font-size:10px;font-weight:700;color:var(--f3);letter-spacing:.6px;text-transform:uppercase;white-space:nowrap}
-td{padding:13px 20px;font-size:13px;vertical-align:middle;border-bottom:1px solid var(--f1)}
+thead{background:#f7f8fc;border-bottom:1px solid #e8eaf0}
+th{padding:10px 18px;text-align:left;font-size:10px;font-weight:500;color:var(--f3);letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
+td{padding:12px 18px;font-size:13px;vertical-align:middle;border-bottom:1px solid #f0f2f5;font-weight:300}
 tr:last-child td{border-bottom:0}
 tbody tr{transition:.1s}
-tbody tr:hover td{background:var(--navy-2xl)}
+tbody tr:hover td{background:#f5f7fb}
 
 /* ── BADGES ── */
-.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
-.badge-nurse{background:var(--navy-xl);color:var(--navy)}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap}
+.badge-nurse{background:#EBF0F7;color:var(--navy)}
 .badge-admin{background:#FEF5F5;color:var(--red)}
-.badge-on{background:var(--okl);color:var(--ok)}
+.badge-on{background:#E3F3EB;color:var(--ok)}
 .badge-off{background:#FEF5F5;color:var(--red)}
 .badge-dot{width:6px;height:6px;border-radius:50%}
 
 /* ── BUTTONS ── */
 .btn{
-  padding:9px 18px;border-radius:var(--r8);border:0;font-family:inherit;
-  font-size:12px;font-weight:700;cursor:pointer;transition:.15s;
+  padding:7px 16px;border-radius:20px;border:0;font-family:inherit;
+  font-size:12px;font-weight:400;cursor:pointer;transition:.15s;
   display:inline-flex;align-items:center;gap:7px;
 }
 .btn:active{transform:scale(.97)}
-.btn-navy{background:var(--navy);color:#fff;box-shadow:0 2px 10px rgba(27,46,92,.2)}
+.btn-navy{background:var(--navy);color:#fff;box-shadow:0 2px 8px rgba(27,46,92,.2)}
 .btn-navy:hover{background:var(--navy-l)}
-.btn-red{background:var(--red);color:#fff;box-shadow:0 2px 10px rgba(196,30,47,.2)}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 2px 8px rgba(196,30,47,.2)}
 .btn-red:hover{background:var(--red-d)}
-.btn-ghost{background:var(--f1);color:var(--f5);border:1px solid var(--f2)}
-.btn-ghost:hover{background:var(--f2)}
-.btn-outline-navy{background:var(--navy-xl);color:var(--navy);border:1px solid #C0CEE8}
+.btn-ghost{background:#fff;color:var(--f5);border:1px solid #e8eaf0}
+.btn-ghost:hover{background:var(--f0)}
+.btn-outline-navy{background:#EBF0F7;color:var(--navy);border:1px solid #C0CEE8}
 .btn-outline-navy:hover{background:#D8E5F5}
 .btn-outline-red{background:#FEF5F5;color:var(--red);border:1px solid #F5C0C6}
 .btn-outline-red:hover{background:#FDD9DD}
-.btn-sm{padding:5px 12px;font-size:11px}
+.btn-sm{padding:4px 12px;font-size:11px}
 
 /* ── MODAL ── */
 .mbg{
   display:none;position:fixed;inset:0;
-  background:rgba(10,18,40,.6);backdrop-filter:blur(4px);
+  background:rgba(14,27,56,.4);
   z-index:400;align-items:center;justify-content:center;
 }
 .mbg.open{display:flex;animation:fadeIn .15s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .mdl{
-  background:var(--white);border-radius:20px;
+  background:#fff;border-radius:14px;
   width:480px;max-width:95vw;overflow:hidden;
-  box-shadow:0 24px 64px rgba(10,18,40,.25);
+  box-shadow:0 16px 48px rgba(14,27,56,.18);
   animation:mdlIn .2s ease;
 }
-@keyframes mdlIn{from{transform:scale(.95) translateY(12px);opacity:0}to{transform:none;opacity:1}}
-.mdl-bar{height:5px;background:linear-gradient(90deg,var(--navy-d),var(--navy),var(--red))}
-.mdl-hdr{padding:22px 26px 0;display:flex;align-items:flex-start;justify-content:space-between}
-.mdl-title-wrap .mdl-title{font-size:17px;font-weight:800;color:var(--navy)}
-.mdl-title-wrap .mdl-sub{font-size:12px;color:var(--f3);margin-top:2px}
+@keyframes mdlIn{from{transform:scale(.96) translateY(10px);opacity:0}to{transform:none;opacity:1}}
+.mdl-bar{height:3px;background:linear-gradient(90deg,var(--navy),var(--red))}
+.mdl-hdr{padding:20px 22px 0;display:flex;align-items:flex-start;justify-content:space-between}
+.mdl-title-wrap .mdl-title{font-size:16px;font-weight:600;color:var(--navy)}
+.mdl-title-wrap .mdl-sub{font-size:12px;color:var(--f3);margin-top:2px;font-weight:300}
 .mdl-close{
-  width:32px;height:32px;border-radius:9px;
-  border:1px solid var(--f2);background:var(--f0);
-  cursor:pointer;font-size:16px;color:var(--f4);
+  width:30px;height:30px;border-radius:50%;
+  border:1px solid #e8eaf0;background:#f7f8fc;
+  cursor:pointer;font-size:14px;color:var(--f4);
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
   transition:.12s;
 }
-.mdl-close:hover{background:var(--f2);color:var(--f6)}
-.mdl-body{padding:22px 26px}
+.mdl-close:hover{background:var(--f0);color:var(--f6)}
+.mdl-body{padding:20px 22px}
 .mdl-foot{
-  padding:14px 26px 22px;display:flex;justify-content:flex-end;gap:8px;
-  border-top:1px solid var(--f1);
+  padding:12px 22px 20px;display:flex;justify-content:flex-end;gap:8px;
+  border-top:1px solid #e8eaf0;
 }
 
 /* ── FORM ── */
-.fg{margin-bottom:16px}
-.fg label{display:block;font-size:10px;font-weight:700;color:var(--f4);margin-bottom:6px;letter-spacing:.6px;text-transform:uppercase}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:10px;font-weight:500;color:var(--f4);margin-bottom:5px;letter-spacing:.4px;text-transform:uppercase}
 .fg input,.fg select{
-  width:100%;padding:11px 14px;
-  border:1.5px solid var(--f2);border-radius:var(--r8);
+  width:100%;padding:9px 12px;
+  border:1px solid #e8eaf0;border-radius:8px;
   font-family:inherit;font-size:13px;color:var(--f6);
-  background:var(--f0);outline:0;transition:.2s;
+  background:#f7f8fc;outline:0;transition:.2s;font-weight:300;
 }
-.fg input:focus,.fg select:focus{border-color:var(--navy);background:var(--white);box-shadow:0 0 0 3px var(--navy-xl)}
+.fg input:focus,.fg select:focus{border-color:var(--navy);background:#fff;box-shadow:0 0 0 3px #EBF0F7}
 .fg input::placeholder{color:var(--f3)}
-.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.fg-hint{font-size:11px;color:var(--f3);margin-top:5px}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg-hint{font-size:11px;color:var(--f3);margin-top:4px}
 .fg-err{
-  display:none;background:#FEF5F5;border:1.5px solid #F5C0C6;
-  border-radius:var(--r8);padding:10px 14px;
-  font-size:12px;color:var(--red);font-weight:600;margin-top:8px;
+  display:none;background:#FEF5F5;border:1px solid #F5C0C6;
+  border-radius:8px;padding:9px 12px;
+  font-size:12px;color:var(--red);font-weight:400;margin-top:8px;
 }
 .fg-err.show{display:block}
 
 /* ── TOAST ── */
 .toast{
-  position:fixed;bottom:28px;right:28px;z-index:999;
-  color:#fff;padding:13px 20px;border-radius:12px;
-  font-size:13px;font-weight:600;
-  box-shadow:0 8px 32px rgba(10,18,40,.25);
+  position:fixed;bottom:24px;right:24px;z-index:999;
+  color:#fff;padding:11px 18px;border-radius:10px;
+  font-size:13px;font-weight:400;
+  box-shadow:0 6px 24px rgba(14,27,56,.2);
   animation:mdlIn .2s ease;
-  display:flex;align-items:center;gap:10px;max-width:340px;
+  display:flex;align-items:center;gap:10px;max-width:320px;
 }
-.toast{background:var(--navy-d)}
+.toast{background:var(--navy)}
 .toast.ok{background:var(--ok)}
 .toast.err{background:var(--red)}
 
@@ -258,7 +260,7 @@ tbody tr:hover td{background:var(--navy-2xl)}
 .empty p{font-size:13px;font-weight:600;color:var(--f3)}
 
 /* ── LOG ── */
-.log-chip{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:4px}
+.log-chip{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;display:inline-flex;align-items:center;gap:4px}
 
 
 /* ── RESPONSIVE ── */
@@ -391,7 +393,7 @@ tbody tr:hover td{background:var(--navy-2xl)}
     <div class="tb-pill" style="gap:9px;cursor:default">
       <div class="tb-avatar">A</div>
       <div class="tb-avatar-name">
-        <div style="font-size:12px;font-weight:700;color:#fff">Administrator</div>
+        <div style="font-size:12px;font-weight:500;color:#fff">Administrator</div>
         <div style="font-size:9px;color:rgba(255,255,255,.35);letter-spacing:.3px">System Admin</div>
       </div>
     </div>
@@ -646,7 +648,7 @@ tbody tr:hover td{background:var(--navy-2xl)}
               <div class="fg-hint">Server รับ POST {group, message} แล้วส่งต่อผ่าน LINE Messaging API</div>
             </div>
             <div style="background:var(--f0);border-radius:var(--r8);padding:14px;margin-top:4px">
-              <div style="font-size:11px;font-weight:700;color:var(--f4);letter-spacing:.4px;text-transform:uppercase;margin-bottom:10px">Group ID Settings</div>
+              <div style="font-size:11px;font-weight:500;color:var(--f4);letter-spacing:.4px;text-transform:uppercase;margin-bottom:10px">Group ID Settings</div>
               <div class="fg"><label>หน่วยพยาบาล</label><input type="text" id="cfgG1" placeholder="Group ID หรือชื่อกลุ่ม"></div>
               <div class="fg"><label>แผนกเภสัชกรรม</label><input type="text" id="cfgG2" placeholder="Group ID หรือชื่อกลุ่ม"></div>
               <div class="fg"><label>แผนกประกันสุขภาพ</label><input type="text" id="cfgG3" placeholder="Group ID หรือชื่อกลุ่ม"></div>
@@ -778,7 +780,7 @@ tbody tr:hover td{background:var(--navy-2xl)}
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C41E2F" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         </div>
         <div>
-          <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:4px">ต้องการลบผู้ใช้งานนี้?</div>
+          <div style="font-size:13px;font-weight:500;color:var(--red);margin-bottom:4px">ต้องการลบผู้ใช้งานนี้?</div>
           <div style="font-size:12px;color:var(--f4);line-height:1.6">ผู้ใช้งาน <strong id="delName" style="color:var(--navy)"></strong> จะถูกลบออกจากระบบทันที และจะไม่สามารถเข้าสู่ระบบได้อีก</div>
         </div>
       </div>
@@ -807,9 +809,9 @@ tbody tr:hover td{background:var(--navy-2xl)}
     </div>
     <div class="mdl-body">
       <div style="background:#FDF8E1;border:1.5px solid #E8D87A;border-radius:var(--r12);padding:16px 18px;margin-bottom:16px">
-        <div style="font-size:11px;font-weight:700;color:#7A6200;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px">Temporary Password</div>
+        <div style="font-size:11px;font-weight:500;color:#7A6200;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px">Temporary Password</div>
         <div style="display:flex;align-items:center;gap:10px">
-          <code id="tempPwDisplay" style="font-size:22px;font-weight:800;color:#B8960C;letter-spacing:4px;flex:1"></code>
+          <code id="tempPwDisplay" style="font-size:22px;font-weight:600;color:#B8960C;letter-spacing:4px;flex:1"></code>
           <button class="btn btn-sm" style="background:#E8D060;color:#7A6200;border:0" onclick="copyTempPw()">Copy</button>
         </div>
       </div>
@@ -904,16 +906,16 @@ function renderUsers(){
   if(!tb) return;
   if(!f.length){tb.innerHTML='<tr><td colspan="7"><div class="empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><p>ไม่พบผู้ใช้งาน</p></div></td></tr>';return;}
   tb.innerHTML=f.map(u=>`<tr>
-    <td><span style="font-weight:700;color:var(--navy)">${esc(u.firstname)} ${esc(u.lastname)}</span></td>
+    <td><span style="font-weight:500;color:var(--navy)">${esc(u.firstname)} ${esc(u.lastname)}</span></td>
     <td><code style="background:var(--f1);padding:2px 7px;border-radius:5px;font-size:12px">${esc(u.username)}</code></td>
     <td><span class="badge ${u.role==='admin'?'badge-admin':'badge-nurse'}">${u.role==='admin'?'Admin':'พยาบาล'}</span></td>
     <td style="color:var(--f4)">${esc(u.ward||'-')}</td>
     <td><span class="badge ${u.status==='active'?'badge-active':'badge-inactive'}"><span class="dot" style="background:${u.status==='active'?'var(--ok)':'var(--red)'}"></span>${u.status==='active'?'ใช้งาน':'ระงับ'}</span></td>
     <td style="color:var(--f3);font-size:11px">${esc(u.createdBy)}</td>
     <td><div style="display:flex;gap:6px">
-      <button onclick="openEditModal('${u.id}')" style="padding:5px 12px;border-radius:6px;border:0;background:#EBF0F7;color:#1B2E5C;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;transition:.12s" onmouseover="this.style.background='#D4E0F0'" onmouseout="this.style.background='#EBF0F7'">แก้ไข</button>
-      <button onclick="resetPw('${u.id}')" style="padding:5px 12px;border-radius:6px;border:0;background:#FDF5E0;color:#9A7A0A;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;transition:.12s" onmouseover="this.style.background='#F5E9BE'" onmouseout="this.style.background='#FDF5E0'">Reset</button>
-      ${u.username!=='admin'?`<button onclick="openDelModal('${u.id}')" style="padding:5px 12px;border-radius:6px;border:0;background:#FEEAEA;color:#C41E2F;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;transition:.12s" onmouseover="this.style.background='#FDD5D5'" onmouseout="this.style.background='#FEEAEA'">ลบ</button>`:''}
+      <button onclick="openEditModal('${u.id}')" style="padding:5px 12px;border-radius:20px;border:0;background:#EBF0F7;color:#1B2E5C;font-family:inherit;font-size:11px;font-weight:400;cursor:pointer;transition:.12s" onmouseover="this.style.background='#D4E0F0'" onmouseout="this.style.background='#EBF0F7'">แก้ไข</button>
+      <button onclick="resetPw('${u.id}')" style="padding:5px 12px;border-radius:20px;border:0;background:#FDF5E0;color:#9A7A0A;font-family:inherit;font-size:11px;font-weight:400;cursor:pointer;transition:.12s" onmouseover="this.style.background='#F5E9BE'" onmouseout="this.style.background='#FDF5E0'">Reset</button>
+      ${u.username!=='admin'?`<button onclick="openDelModal('${u.id}')" style="padding:5px 12px;border-radius:20px;border:0;background:#FEEAEA;color:#C41E2F;font-family:inherit;font-size:11px;font-weight:400;cursor:pointer;transition:.12s" onmouseover="this.style.background='#FDD5D5'" onmouseout="this.style.background='#FEEAEA'">ลบ</button>`:''}
     </div></td>
   </tr>`).join('');
 }
@@ -1131,7 +1133,7 @@ function renderWards(){
           <button class="btn btn-outline-red btn-sm" onclick="delWard('${w.id}')">ลบ</button>
         </div>
       </div>
-      <div style="font-size:16px;font-weight:800;color:var(--navy);margin-bottom:4px">${esc(w.name)}</div>
+      <div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:4px">${esc(w.name)}</div>
       <div style="font-size:12px;color:var(--f3)">${esc(w.desc||'ไม่มีคำอธิบาย')}</div>
     </div>`).join('');
 }
@@ -1187,8 +1189,8 @@ function renderStats(){
   document.getElementById('topUsersBody').innerHTML=topUsers.length?topUsers.map(([u,c])=>`
     <div style="padding:10px 20px;border-bottom:1px solid var(--f1)">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-        <code style="font-size:13px;font-weight:700;color:var(--navy)">${esc(u)}</code>
-        <span style="font-size:12px;font-weight:700;color:var(--f4)">${c} ครั้ง</span>
+        <code style="font-size:13px;font-weight:500;color:var(--navy)">${esc(u)}</code>
+        <span style="font-size:12px;font-weight:500;color:var(--f4)">${c} ครั้ง</span>
       </div>
       <div style="height:6px;background:var(--f1);border-radius:3px;overflow:hidden">
         <div style="height:100%;width:${Math.round(c/maxU*100)}%;background:linear-gradient(90deg,var(--navy),var(--navy-l));border-radius:3px;transition:.4s"></div>
@@ -1203,8 +1205,8 @@ function renderStats(){
   document.getElementById('wardActivityBody').innerHTML=topWards.length?topWards.map(([w,c])=>`
     <div style="padding:10px 20px;border-bottom:1px solid var(--f1)">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-        <span style="font-size:13px;font-weight:700;color:var(--navy)">${esc(w)}</span>
-        <span style="font-size:12px;font-weight:700;color:var(--f4)">${c} คน</span>
+        <span style="font-size:13px;font-weight:500;color:var(--navy)">${esc(w)}</span>
+        <span style="font-size:12px;font-weight:500;color:var(--f4)">${c} คน</span>
       </div>
       <div style="height:6px;background:var(--f1);border-radius:3px;overflow:hidden">
         <div style="height:100%;width:${Math.round(c/maxW*100)}%;background:linear-gradient(90deg,var(--red),var(--red-l));border-radius:3px;transition:.4s"></div>
