@@ -2,8 +2,8 @@
   "name": "BHU Discharge Tracking",
   "short_name": "BHU Discharge",
   "description": "Bangkok Hospital Udon - Discharge Tracking System",
-  "start_url": "/bhu-discharge/login.html?pwa=1",
-  "scope": "/bhu-discharge/",
+  "start_url": "./login.html?pwa=1",
+  "scope": "./",
   "display": "fullscreen",
   "display_override": [
     "fullscreen",

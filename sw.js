@@ -1,9 +1,9 @@
-const CACHE_NAME = 'bhu-discharge-v25';
+const CACHE_NAME = 'bhu-discharge-v26';
 const URLS = [
-  '/bhu-discharge/login.html',
-  '/bhu-discharge/discharge-tracker.html',
-  '/bhu-discharge/admin.html',
-  '/bhu-discharge/manifest.json'
+  './login.html',
+  './discharge-tracker.html',
+  './admin.html',
+  './manifest.json'
 ];
 
 self.addEventListener('install', e => {
@@ -23,7 +23,6 @@ self.addEventListener('fetch', e => {
   e.respondWith(
     fetch(e.request)
       .then(res => {
-        // อัปเดต cache ด้วยไฟล์ใหม่
         const clone = res.clone();
         caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
         return res;
